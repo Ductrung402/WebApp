@@ -1,0 +1,23 @@
+{
+  "maCodePhongThi": "AB12CD",
+  "runId": "61cac6ad-2559-476f-8048-51345d742e6a",
+  "idPhongThi": "fixture-teacher-room",
+  "idDeThi": "fixture-teacher-exam",
+  "tenDeThi": "Socket fixture",
+  "tenLop": "6A",
+  "thoiGianLamBai": 30,
+  "trangThaiPhong": "DANG_THI",
+  "startsAt": 1791841928967,
+  "endsAt": 1791843728967,
+  "serverTime": 1791841928998,
+  "cauHoiList": [
+    {
+      "idCauHoi": "d4649746-3792-458e-8a84-062d6d87567c",
+      "noiDung": "Water formula?",
+      "dapAnA": "H2O",
+      "dapAnB": "CO2",
+      "dapAnC": "O2",
+      "dapAnD": "NaCl"
+    }
+  ]
+}

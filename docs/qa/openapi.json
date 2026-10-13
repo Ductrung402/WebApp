@@ -1,0 +1,1693 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AI Quiz & Exam API",
+    "description": "API for the AI quiz generator and online exam system.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Get Health",
+        "operationId": "get_health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Teacher authentication"
+        ],
+        "summary": "Register",
+        "operationId": "register_api_auth_register_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeacherRegisterSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeacherResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Teacher authentication"
+        ],
+        "summary": "Login",
+        "operationId": "login_api_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TeacherLoginSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/auth/me": {
+      "get": {
+        "tags": [
+          "Teacher authentication"
+        ],
+        "summary": "Get Me",
+        "operationId": "get_me_api_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeacherResponseSchema"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/exams/preview-ai": {
+      "post": {
+        "tags": [
+          "Teacher exams"
+        ],
+        "summary": "Preview Ai",
+        "operationId": "preview_ai_api_exams_preview_ai_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeThiGenerateAISchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeThiCreateManualSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/exams/generate-ai": {
+      "post": {
+        "tags": [
+          "Teacher exams"
+        ],
+        "summary": "Generate Ai",
+        "operationId": "generate_ai_api_exams_generate_ai_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeThiGenerateAISchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeThiDetailResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/exams": {
+      "get": {
+        "tags": [
+          "Teacher exams"
+        ],
+        "summary": "List Owned",
+        "operationId": "list_owned_api_exams_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DeThiListResponseSchema"
+                  },
+                  "type": "array",
+                  "title": "Response List Owned Api Exams Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Teacher exams"
+        ],
+        "summary": "Create Manual",
+        "operationId": "create_manual_api_exams_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeThiCreateManualSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeThiDetailResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/exams/{id_de_thi}": {
+      "get": {
+        "tags": [
+          "Teacher exams"
+        ],
+        "summary": "Get Detail",
+        "operationId": "get_detail_api_exams__id_de_thi__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id_de_thi",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id De Thi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeThiDetailResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Teacher exams"
+        ],
+        "summary": "Update",
+        "operationId": "update_api_exams__id_de_thi__put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id_de_thi",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id De Thi"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeThiCreateManualSchema"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeThiDetailResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Teacher exams"
+        ],
+        "summary": "Delete",
+        "operationId": "delete_api_exams__id_de_thi__delete",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id_de_thi",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id De Thi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExamDeleteResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rooms": {
+      "post": {
+        "tags": [
+          "Exam rooms"
+        ],
+        "summary": "Create",
+        "operationId": "create_api_rooms_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoomCreateSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/rooms/join": {
+      "post": {
+        "tags": [
+          "Exam rooms"
+        ],
+        "summary": "Join",
+        "operationId": "join_api_rooms_join_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentJoinSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentJoinResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/rooms/{id_phong_thi}": {
+      "get": {
+        "tags": [
+          "Exam rooms"
+        ],
+        "summary": "Get Detail",
+        "operationId": "get_detail_api_rooms__id_phong_thi__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id_phong_thi",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Id Phong Thi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomDetailResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/submissions/result": {
+      "get": {
+        "tags": [
+          "Exam submissions"
+        ],
+        "summary": "Result",
+        "operationId": "result_api_submissions_result_get",
+        "parameters": [
+          {
+            "name": "idHs",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Idhs"
+            }
+          },
+          {
+            "name": "idPhongThi",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "title": "Idphongthi"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionResultResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/submissions/submit": {
+      "post": {
+        "tags": [
+          "Exam submissions"
+        ],
+        "summary": "Submit",
+        "operationId": "submit_api_submissions_submit_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExamSubmissionSchema"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmissionResultResponseSchema"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnswerItem": {
+        "properties": {
+          "idCauHoi": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Idcauhoi"
+          },
+          "dapAnChon": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "A",
+                  "B",
+                  "C",
+                  "D"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Dapanchon"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idCauHoi",
+          "dapAnChon"
+        ],
+        "title": "AnswerItem"
+      },
+      "CauHoiCreateSchema": {
+        "properties": {
+          "noiDung": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Noidung"
+          },
+          "dapAnA": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dapana"
+          },
+          "dapAnB": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dapanb"
+          },
+          "dapAnC": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dapanc"
+          },
+          "dapAnD": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dapand"
+          },
+          "dapAnDung": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Dapandung"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "noiDung",
+          "dapAnA",
+          "dapAnB",
+          "dapAnC",
+          "dapAnD",
+          "dapAnDung"
+        ],
+        "title": "CauHoiCreateSchema"
+      },
+      "CauHoiResponseSchema": {
+        "properties": {
+          "noiDung": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Noidung"
+          },
+          "dapAnA": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dapana"
+          },
+          "dapAnB": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dapanb"
+          },
+          "dapAnC": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dapanc"
+          },
+          "dapAnD": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Dapand"
+          },
+          "dapAnDung": {
+            "type": "string",
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "title": "Dapandung"
+          },
+          "idCauHoi": {
+            "type": "string",
+            "title": "Idcauhoi"
+          },
+          "idDeThi": {
+            "type": "string",
+            "title": "Iddethi"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "noiDung",
+          "dapAnA",
+          "dapAnB",
+          "dapAnC",
+          "dapAnD",
+          "dapAnDung",
+          "idCauHoi",
+          "idDeThi"
+        ],
+        "title": "CauHoiResponseSchema"
+      },
+      "DeThiCreateManualSchema": {
+        "properties": {
+          "tenDeThi": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Tendethi"
+          },
+          "khoi": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Khoi"
+          },
+          "kieuTaiLieu": {
+            "type": "string",
+            "enum": [
+              "TEXT",
+              "FILE"
+            ],
+            "title": "Kieutailieu",
+            "default": "TEXT"
+          },
+          "noiDungTaiLieu": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Noidungtailieu"
+          },
+          "cauHoiList": {
+            "items": {
+              "$ref": "#/components/schemas/CauHoiCreateSchema"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Cauhoilist"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tenDeThi",
+          "cauHoiList"
+        ],
+        "title": "DeThiCreateManualSchema"
+      },
+      "DeThiDetailResponseSchema": {
+        "properties": {
+          "idDeThi": {
+            "type": "string",
+            "title": "Iddethi"
+          },
+          "idGv": {
+            "type": "string",
+            "title": "Idgv"
+          },
+          "tenDeThi": {
+            "type": "string",
+            "title": "Tendethi"
+          },
+          "khoi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Khoi"
+          },
+          "soLuongCauHoi": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Soluongcauhoi"
+          },
+          "kieuTaiLieu": {
+            "type": "string",
+            "title": "Kieutailieu"
+          },
+          "ngayTao": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ngaytao"
+          },
+          "noiDungTaiLieu": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Noidungtailieu"
+          },
+          "cauHoiList": {
+            "items": {
+              "$ref": "#/components/schemas/CauHoiResponseSchema"
+            },
+            "type": "array",
+            "title": "Cauhoilist"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idDeThi",
+          "idGv",
+          "tenDeThi",
+          "khoi",
+          "soLuongCauHoi",
+          "kieuTaiLieu",
+          "ngayTao",
+          "noiDungTaiLieu",
+          "cauHoiList"
+        ],
+        "title": "DeThiDetailResponseSchema"
+      },
+      "DeThiGenerateAISchema": {
+        "properties": {
+          "tenDeThi": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Tendethi"
+          },
+          "khoi": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Khoi"
+          },
+          "rawText": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Rawtext"
+          },
+          "numQuestions": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Numquestions",
+            "default": 10
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tenDeThi",
+          "rawText"
+        ],
+        "title": "DeThiGenerateAISchema"
+      },
+      "DeThiListResponseSchema": {
+        "properties": {
+          "idDeThi": {
+            "type": "string",
+            "title": "Iddethi"
+          },
+          "idGv": {
+            "type": "string",
+            "title": "Idgv"
+          },
+          "tenDeThi": {
+            "type": "string",
+            "title": "Tendethi"
+          },
+          "khoi": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Khoi"
+          },
+          "soLuongCauHoi": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Soluongcauhoi"
+          },
+          "kieuTaiLieu": {
+            "type": "string",
+            "title": "Kieutailieu"
+          },
+          "ngayTao": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ngaytao"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idDeThi",
+          "idGv",
+          "tenDeThi",
+          "khoi",
+          "soLuongCauHoi",
+          "kieuTaiLieu",
+          "ngayTao"
+        ],
+        "title": "DeThiListResponseSchema"
+      },
+      "ExamDeleteResponseSchema": {
+        "properties": {
+          "idDeThi": {
+            "type": "string",
+            "title": "Iddethi"
+          },
+          "status": {
+            "type": "string",
+            "const": "deleted",
+            "title": "Status",
+            "default": "deleted"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idDeThi"
+        ],
+        "title": "ExamDeleteResponseSchema"
+      },
+      "ExamSubmissionSchema": {
+        "properties": {
+          "idHs": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Idhs"
+          },
+          "idPhongThi": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Idphongthi"
+          },
+          "danhSachCauTraLoi": {
+            "items": {
+              "$ref": "#/components/schemas/AnswerItem"
+            },
+            "type": "array",
+            "title": "Danhsachcautraloi"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idHs",
+          "idPhongThi",
+          "danhSachCauTraLoi"
+        ],
+        "title": "ExamSubmissionSchema"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "ok",
+            "title": "Status",
+            "default": "ok"
+          },
+          "app": {
+            "type": "string",
+            "const": "Quiz AI & Exam System",
+            "title": "App",
+            "default": "Quiz AI & Exam System"
+          }
+        },
+        "type": "object",
+        "title": "HealthResponse"
+      },
+      "RoomCreateSchema": {
+        "properties": {
+          "idDeThi": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Iddethi"
+          },
+          "tenLop": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Tenlop"
+          },
+          "thoiGianLamBai": {
+            "type": "integer",
+            "maximum": 2147483647.0,
+            "minimum": 1.0,
+            "title": "Thoigianlambai"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idDeThi",
+          "tenLop",
+          "thoiGianLamBai"
+        ],
+        "title": "RoomCreateSchema"
+      },
+      "RoomDetailResponseSchema": {
+        "properties": {
+          "idPhongThi": {
+            "type": "string",
+            "title": "Idphongthi"
+          },
+          "maCodePhongThi": {
+            "type": "string",
+            "maxLength": 6,
+            "minLength": 6,
+            "pattern": "^[A-Z0-9]{6}$",
+            "title": "Macodephongthi"
+          },
+          "tenLop": {
+            "type": "string",
+            "title": "Tenlop"
+          },
+          "thoiGianLamBai": {
+            "type": "integer",
+            "title": "Thoigianlambai"
+          },
+          "trangThaiPhong": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TrangThaiPhongThi"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ngayTaoPhong": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ngaytaophong"
+          },
+          "hocSinhList": {
+            "items": {
+              "$ref": "#/components/schemas/StudentResponseSchema"
+            },
+            "type": "array",
+            "title": "Hocsinhlist"
+          },
+          "ketQuaList": {
+            "items": {
+              "$ref": "#/components/schemas/StudentScoreSchema"
+            },
+            "type": "array",
+            "title": "Ketqualist"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idPhongThi",
+          "maCodePhongThi",
+          "tenLop",
+          "thoiGianLamBai",
+          "trangThaiPhong",
+          "ngayTaoPhong",
+          "hocSinhList"
+        ],
+        "title": "RoomDetailResponseSchema"
+      },
+      "RoomResponseSchema": {
+        "properties": {
+          "idPhongThi": {
+            "type": "string",
+            "title": "Idphongthi"
+          },
+          "maCodePhongThi": {
+            "type": "string",
+            "maxLength": 6,
+            "minLength": 6,
+            "pattern": "^[A-Z0-9]{6}$",
+            "title": "Macodephongthi"
+          },
+          "tenLop": {
+            "type": "string",
+            "title": "Tenlop"
+          },
+          "thoiGianLamBai": {
+            "type": "integer",
+            "title": "Thoigianlambai"
+          },
+          "trangThaiPhong": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TrangThaiPhongThi"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ngayTaoPhong": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "date"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ngaytaophong"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idPhongThi",
+          "maCodePhongThi",
+          "tenLop",
+          "thoiGianLamBai",
+          "trangThaiPhong",
+          "ngayTaoPhong"
+        ],
+        "title": "RoomResponseSchema"
+      },
+      "StudentJoinResponseSchema": {
+        "properties": {
+          "idHs": {
+            "type": "string",
+            "title": "Idhs"
+          },
+          "hoVaTen": {
+            "type": "string",
+            "title": "Hovaten"
+          },
+          "maCodePhongThi": {
+            "type": "string",
+            "maxLength": 6,
+            "minLength": 6,
+            "pattern": "^[A-Z0-9]{6}$",
+            "title": "Macodephongthi"
+          },
+          "idPhongThi": {
+            "type": "string",
+            "title": "Idphongthi"
+          },
+          "tenLop": {
+            "type": "string",
+            "title": "Tenlop"
+          },
+          "thoiGianLamBai": {
+            "type": "integer",
+            "title": "Thoigianlambai"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idHs",
+          "hoVaTen",
+          "maCodePhongThi",
+          "idPhongThi",
+          "tenLop",
+          "thoiGianLamBai"
+        ],
+        "title": "StudentJoinResponseSchema"
+      },
+      "StudentJoinSchema": {
+        "properties": {
+          "hoVaTen": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Hovaten"
+          },
+          "maCodePhongThi": {
+            "type": "string",
+            "maxLength": 6,
+            "minLength": 6,
+            "pattern": "^[A-Z0-9]{6}$",
+            "title": "Macodephongthi"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "hoVaTen",
+          "maCodePhongThi"
+        ],
+        "title": "StudentJoinSchema"
+      },
+      "StudentResponseSchema": {
+        "properties": {
+          "idHs": {
+            "type": "string",
+            "title": "Idhs"
+          },
+          "hoVaTen": {
+            "type": "string",
+            "title": "Hovaten"
+          },
+          "maCodePhongThi": {
+            "type": "string",
+            "maxLength": 6,
+            "minLength": 6,
+            "pattern": "^[A-Z0-9]{6}$",
+            "title": "Macodephongthi"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idHs",
+          "hoVaTen",
+          "maCodePhongThi"
+        ],
+        "title": "StudentResponseSchema"
+      },
+      "StudentScoreSchema": {
+        "properties": {
+          "idHs": {
+            "type": "string",
+            "title": "Idhs"
+          },
+          "hoVaTen": {
+            "type": "string",
+            "title": "Hovaten"
+          },
+          "maCodePhongThi": {
+            "type": "string",
+            "maxLength": 6,
+            "minLength": 6,
+            "pattern": "^[A-Z0-9]{6}$",
+            "title": "Macodephongthi"
+          },
+          "trangThai": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TrangThaiBaiLam"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "diemSo": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 10.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Diemso"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idHs",
+          "hoVaTen",
+          "maCodePhongThi",
+          "trangThai",
+          "diemSo"
+        ],
+        "title": "StudentScoreSchema"
+      },
+      "SubmissionResultResponseSchema": {
+        "properties": {
+          "idHs": {
+            "type": "string",
+            "title": "Idhs"
+          },
+          "diemSo": {
+            "type": "number",
+            "maximum": 10.0,
+            "minimum": 0.0,
+            "title": "Diemso"
+          },
+          "soCauDung": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Socaudung"
+          },
+          "tongSoCau": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Tongsocau"
+          },
+          "trangThai": {
+            "$ref": "#/components/schemas/TrangThaiBaiLam"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "idHs",
+          "diemSo",
+          "soCauDung",
+          "tongSoCau",
+          "trangThai"
+        ],
+        "title": "SubmissionResultResponseSchema"
+      },
+      "TeacherLoginSchema": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "mat_khau": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 8,
+            "title": "Mat Khau"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "email",
+          "mat_khau"
+        ],
+        "title": "TeacherLoginSchema"
+      },
+      "TeacherRegisterSchema": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "mat_khau": {
+            "type": "string",
+            "maxLength": 72,
+            "minLength": 8,
+            "title": "Mat Khau"
+          },
+          "ho_ten": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Ho Ten"
+          },
+          "truong": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Truong"
+          },
+          "tinh": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tinh"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "email",
+          "mat_khau",
+          "ho_ten"
+        ],
+        "title": "TeacherRegisterSchema"
+      },
+      "TeacherResponseSchema": {
+        "properties": {
+          "id_gv": {
+            "type": "string",
+            "title": "Id Gv"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "ho_ten": {
+            "type": "string",
+            "title": "Ho Ten"
+          },
+          "truong": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Truong"
+          },
+          "tinh": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tinh"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_gv",
+          "email",
+          "ho_ten"
+        ],
+        "title": "TeacherResponseSchema"
+      },
+      "TokenSchema": {
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "title": "Access Token"
+          },
+          "token_type": {
+            "type": "string",
+            "const": "bearer",
+            "title": "Token Type",
+            "default": "bearer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "access_token"
+        ],
+        "title": "TokenSchema"
+      },
+      "TrangThaiBaiLam": {
+        "type": "string",
+        "enum": [
+          "DANG_THI",
+          "MAT_KET_NOI",
+          "HOAN_THANH"
+        ],
+        "title": "TrangThaiBaiLam"
+      },
+      "TrangThaiPhongThi": {
+        "type": "string",
+        "enum": [
+          "DANG_CHO",
+          "DANG_THI",
+          "DA_DONG"
+        ],
+        "title": "TrangThaiPhongThi"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

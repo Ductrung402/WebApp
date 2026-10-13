@@ -1,0 +1,32 @@
+{
+  "tenDeThi": "Đề E2E · Nước và thiên văn",
+  "khoi": "6",
+  "kieuTaiLieu": "TEXT",
+  "noiDungTaiLieu": "Nước có công thức hóa học H2O. Ở áp suất tiêu chuẩn, nước sôi ở 100 độ C và đóng băng ở 0 độ C. Trái Đất quay quanh Mặt Trời. Mặt Trăng quay quanh Trái Đất. Một năm thông thường có 365 ngày.",
+  "cauHoiList": [
+    {
+      "noiDung": "Công thức hóa học của nước là gì?",
+      "dapAnA": "H2O",
+      "dapAnB": "CO2",
+      "dapAnC": "O2",
+      "dapAnD": "NaCl",
+      "dapAnDung": "A"
+    },
+    {
+      "noiDung": "Ở áp suất tiêu chuẩn, nước sôi ở nhiệt độ bao nhiêu?",
+      "dapAnA": "0 độ C",
+      "dapAnB": "50 độ C",
+      "dapAnC": "100 độ C",
+      "dapAnD": "365 độ C",
+      "dapAnDung": "C"
+    },
+    {
+      "noiDung": "Theo tài liệu, một năm thông thường có bao nhiêu ngày?",
+      "dapAnA": "360 ngày",
+      "dapAnB": "365 ngày",
+      "dapAnC": "366 ngày",
+      "dapAnD": "300 ngày",
+      "dapAnDung": "B"
+    }
+  ]
+}

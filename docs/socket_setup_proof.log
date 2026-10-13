@@ -1,0 +1,24 @@
+SERVER LOG
+socket_connected sid=i2z7SNJcV8656rQlAAAB
+socket_connected sid=wtgZ8HtklZMQGV1dAAAD
+socket_joined sid=i2z7SNJcV8656rQlAAAB room=AB12CD role=teacher
+socket_joined sid=wtgZ8HtklZMQGV1dAAAD room=QR34ST role=teacher
+socket_connected sid=rVpwdevvZCz6cDmhAAAF
+socket_joined sid=rVpwdevvZCz6cDmhAAAF room=AB12CD role=student
+socket_disconnected sid=rVpwdevvZCz6cDmhAAAF
+socket_connected sid=NaAF7_Fd6wcMO_QHAAAH
+socket_joined sid=NaAF7_Fd6wcMO_QHAAAH room=AB12CD role=student
+socket_disconnected sid=i2z7SNJcV8656rQlAAAB
+socket_disconnected sid=wtgZ8HtklZMQGV1dAAAD
+socket_disconnected sid=NaAF7_Fd6wcMO_QHAAAH
+
+CLIENT LOG
+CLIENT connected role=teacher sid=i2z7SNJcV8656rQlAAAB transport=websocket
+CLIENT connected role=other-teacher sid=wtgZ8HtklZMQGV1dAAAD transport=websocket
+CLIENT joined room=AB12CD role=teacher status=ok
+CLIENT joined room=QR34ST role=teacher status=ok
+CLIENT connected role=student sid=rVpwdevvZCz6cDmhAAAF transport=websocket
+CLIENT joined room=AB12CD role=student status=ok
+CLIENT teacher roster room=AB12CD students=1
+CLIENT joined room=AB12CD role=student status=ok
+PASS: real WebSocket connect/join, teacher-only roster, room isolation, ownership=403 and reconnect/rejoin.

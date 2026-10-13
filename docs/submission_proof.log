@@ -1,0 +1,20 @@
+SERVER LOG
+socket_connected sid=Y10RsCTcVmhh8B9VAAAB
+socket_connected sid=iitpvEIQaRU_nGr4AAAD
+socket_connected sid=VIGMCB7y3IzWtQ0RAAAF
+socket_joined sid=Y10RsCTcVmhh8B9VAAAB room=AB12CD role=teacher
+socket_joined sid=iitpvEIQaRU_nGr4AAAD room=QR34ST role=teacher
+socket_joined sid=VIGMCB7y3IzWtQ0RAAAF room=AB12CD role=student
+exam_started room=AB12CD run=8696cf38-03c1-4bff-af6d-bd8be9e66286 state=DANG_THI
+student_reconnected student=fixture-student room=AB12CD state=HOAN_THANH remaining=1800
+socket_disconnected sid=VIGMCB7y3IzWtQ0RAAAF
+socket_connected sid=PA3YbBTbbQ6ihQkoAAAH
+socket_joined sid=PA3YbBTbbQ6ihQkoAAAH room=AB12CD role=student
+socket_disconnected sid=Y10RsCTcVmhh8B9VAAAB
+socket_disconnected sid=iitpvEIQaRU_nGr4AAAD
+socket_disconnected sid=PA3YbBTbbQ6ihQkoAAAH
+
+CLIENT LOG
+SUBMISSION_OUTPUT {"idHs":"fixture-student","diemSo":6.67,"soCauDung":2,"tongSoCau":3,"trangThai":"HOAN_THANH"}
+TEACHER_OUTPUT {"idHs":"fixture-student","diemSo":6.67,"soCauDung":2,"tongSoCau":3,"trangThai":"HOAN_THANH","idPhongThi":"fixture-teacher-room","maCodePhongThi":"AB12CD","hoVaTen":"Nguyễn Văn An"}
+PASS: real REST 2/3 -> 6.67 HOAN_THANH; immutable retry, student_submitted to owner only, completed reconnect, same Socket grading service and no answer-key leakage.

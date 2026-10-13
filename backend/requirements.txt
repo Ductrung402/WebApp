@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+sqlalchemy>=2.0.0,<2.1.0
+typing-extensions>=4.14.0
+psycopg2-binary
+pydantic>=2.0,<3.0
+python-dotenv
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt==4.0.1
+email-validator>=2.0
+python-socketio>=5.17,<6
+google-genai
+httpx

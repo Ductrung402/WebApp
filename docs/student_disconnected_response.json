@@ -1,0 +1,11 @@
+{
+  "idHs": "fixture-student",
+  "hoVaTen": "Nguyễn Văn An",
+  "maCodePhongThi": "AB12CD",
+  "idPhongThi": "fixture-teacher-room",
+  "trangThai": "MAT_KET_NOI",
+  "stateVersion": 1,
+  "stateChangedAt": 1791867967610,
+  "disconnectedAt": 1791867967610,
+  "frozenRemainingSeconds": 1800
+}

@@ -1,0 +1,32 @@
+{
+  "idDeThi": "fa3bb0d2-375d-444e-9c55-b55db8256d61",
+  "idGv": "c8cc07cd-f9c8-43e7-a1b3-12397298f8e8",
+  "tenDeThi": "Kiến thức cơ bản về nước",
+  "khoi": "6",
+  "soLuongCauHoi": 2,
+  "kieuTaiLieu": "TEXT",
+  "ngayTao": "2026-10-13",
+  "noiDungTaiLieu": "Nước có công thức hóa học là H2O. Ở áp suất khí quyển tiêu chuẩn, nước sôi ở 100 độ C và đóng băng ở 0 độ C.",
+  "cauHoiList": [
+    {
+      "noiDung": "Công thức hóa học của nước là gì?",
+      "dapAnA": "H2O",
+      "dapAnB": "CO2",
+      "dapAnC": "O2",
+      "dapAnD": "NaCl",
+      "dapAnDung": "A",
+      "idCauHoi": "b4544198-7a5e-4ab4-b128-8dd4fcae734d",
+      "idDeThi": "fa3bb0d2-375d-444e-9c55-b55db8256d61"
+    },
+    {
+      "noiDung": "Ở áp suất khí quyển tiêu chuẩn, nước sôi ở nhiệt độ bao nhiêu?",
+      "dapAnA": "0 độ C",
+      "dapAnB": "50 độ C",
+      "dapAnC": "100 độ C",
+      "dapAnD": "212 độ C",
+      "dapAnDung": "C",
+      "idCauHoi": "44e03260-b97a-435a-b59b-e6880e893d72",
+      "idDeThi": "fa3bb0d2-375d-444e-9c55-b55db8256d61"
+    }
+  ]
+}
