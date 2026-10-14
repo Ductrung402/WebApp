@@ -1,9 +1,0 @@
-{
-  "command": "npm.cmd test",
-  "workingDirectory": "frontend",
-  "source": "Playwright terminal summary",
-  "passed": 97,
-  "failed": 0,
-  "duration": "4.3m",
-  "exitCode": 0
-}

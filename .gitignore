@@ -1,13 +1,61 @@
+# ==========================================
+# 1. MÔI TRƯỜNG ẢO & DEPENDENCIES
+# ==========================================
 venv/
 .venv/
 __pycache__/
 *.py[cod]
-.env
-.env.*
-!.env.example
+*$py.class
+*.so
+.Python
 node_modules/
 dist/
 .tools/
+
+# ==========================================
+# 2. CẤU HÌNH MÔI TRƯỜNG & KHÓA BÍ MẬT
+# ==========================================
+.env
+.env.*
+!.env.example
+
+# ==========================================
+# 3. RUNTIME TẠM THỜI & BÁO CÁO LOGS
+# ==========================================
+backend/.runtime/
 test-results/
 playwright-report/
-backend/.runtime/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ==========================================
+# 4. TÀI LIỆU NỘI BỘ, PROMPTS & DOKUMENTATION
+# ==========================================
+docs/
+code_doc/
+.rules.md
+overview.md
+master_plan.md
+task_prompts.md
+backend_rules.md
+frontend_rules.md
+frontend/README.md
+
+# ==========================================
+# 5. SCRIPTS KIỂM THỬ KHÔNG CẦN THIẾT
+# ==========================================
+backend/verify_*.py
+frontend/scripts/
+
+# ==========================================
+# 6. FILE TẠM CỦA HỆ ĐIỀU HÀNH & IDE
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.tmp
+*.bak
+*.swp
