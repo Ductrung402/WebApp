@@ -10,7 +10,7 @@ const submitted = (state, person, diemSo) => emit(state, 'student_submitted', { 
 test('closing a waiting room ends the waiting animation and explains how to join another session', async ({ page }) => {
   const state = await setup(page)
   await page.goto('/exam-room/AB12CD/waiting')
-  await expect(page.getByRole('heading', { name: 'Bạn đã sẵn sàng!' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Phòng chờ', exact: true })).toBeVisible()
   await expect.poll(() => state.calls.some(({ event }) => event === 'reconnect_exam')).toBe(true)
   state.emitRoomClosed()
   await expect(page.getByRole('heading', { name: 'Phòng thi đã kết thúc' })).toBeVisible()

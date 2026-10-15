@@ -1,7 +1,7 @@
 @echo off
-title Khoi dong Web App Quiz AI
+title Khoi dong Web App EZam
 echo ========================================================
-echo   DANG KHOI DONG HE THONG QUIZ AI & EXAM MANAGEMENT
+echo   DANG KHOI DONG HE THONG EZAM - AI QUIZ ^& EXAM MANAGEMENT
 echo ========================================================
 echo [1/3] Khoi chay Backend FastAPI (Port 8000)...
 start "Backend - FastAPI (Port 8000)" cmd /k "cd /d %~dp0backend && ..\.venv\Scripts\python.exe -m uvicorn main:app --reload --port 8000"

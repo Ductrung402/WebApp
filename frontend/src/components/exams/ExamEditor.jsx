@@ -27,7 +27,7 @@ export default function ExamEditor({ draft, onChange, onSave, onCancel, saving, 
         <FormField name="tenDeThi" label="Tên đề thi" value={draft.tenDeThi} onChange={(event) => onChange({ ...draft, tenDeThi: event.target.value })} error={errors.tenDeThi} disabled={saving} required />
         <GradeSelect value={draft.khoi} onChange={(value) => onChange({ ...draft, khoi: value })} disabled={saving} />
       </div>
-      <div className="flex items-center justify-between gap-3"><h2 className="text-lg font-semibold">Danh sách câu hỏi</h2><span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-brand-700">{draft.cauHoiList.length} câu hỏi</span></div>
+      <div className="flex items-center justify-between gap-3"><h2 className="text-lg font-semibold">Danh sách câu hỏi</h2><span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold text-brand-700">{draft.cauHoiList.length} câu hỏi</span></div>
       {errors.cauHoiList && <FormMessage>{errors.cauHoiList}</FormMessage>}
       {draft.cauHoiList.map((question, index) => (
         <QuestionEditor key={index} question={question} index={index} onChange={(field, value) => updateQuestion(index, field, value)}

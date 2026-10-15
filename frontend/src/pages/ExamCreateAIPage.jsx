@@ -108,12 +108,12 @@ export default function ExamCreateAIPage() {
 
   return (
     <>
-      <Link to="/exams" className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-700"><ArrowLeft size={16} aria-hidden="true" /> Kho đề thi</Link>
+      <Link to="/exams" className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-brand-700"><ArrowLeft size={16} aria-hidden="true" /> Kho đề thi</Link>
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">{draft ? 'Kiểm duyệt đề thi' : 'Tạo đề thi mới'}</p>
       <h1 className="mt-3 text-3xl font-bold tracking-tight">{draft ? 'Xem trước & chỉnh sửa câu hỏi' : 'Tạo đề thi bằng AI'}</h1>
-      <p className="mb-7 mt-3 text-sm leading-6 text-slate-500">{draft ? 'Đây là bản nháp chưa lưu. Rà soát nội dung và đáp án trước khi lưu vào kho đề.' : 'Biến tài liệu của bạn thành câu hỏi trắc nghiệm, sau đó kiểm duyệt và lưu.'}</p>
-      <ol aria-label="Các bước tạo đề" className="mb-7 flex flex-wrap gap-5 text-xs font-medium">
-        {['Nhập tài liệu', 'Kiểm duyệt câu hỏi', 'Lưu vào kho'].map((label, index) => <li key={label} className={`flex items-center gap-2 ${index === (draft ? 1 : 0) ? 'text-brand-700' : 'text-slate-400'}`}><span className={`flex h-6 w-6 items-center justify-center rounded-full ${index === (draft ? 1 : 0) ? 'bg-brand-700 text-white' : 'bg-slate-100'}`}>{draft && index === 0 ? <Check size={13} aria-hidden="true" /> : index + 1}</span>{label}</li>)}
+      {draft && <p className="mt-3 text-xs font-medium text-slate-600">Bản nháp chưa lưu</p>}
+      <ol aria-label="Các bước tạo đề" className="mb-7 mt-6 flex flex-wrap gap-5 text-xs font-medium">
+        {['Nhập tài liệu', 'Kiểm duyệt câu hỏi', 'Lưu vào kho'].map((label, index) => <li key={label} className={`flex items-center gap-2 ${index === (draft ? 1 : 0) ? 'text-brand-700' : 'text-slate-600'}`}><span className={`flex h-6 w-6 items-center justify-center rounded-full ${index === (draft ? 1 : 0) ? 'bg-brand-700 text-white' : 'bg-slate-100'}`}>{draft && index === 0 ? <Check size={13} aria-hidden="true" /> : index + 1}</span>{label}</li>)}
       </ol>
       {draft ? (
         <ExamEditor draft={draft} onChange={(value) => { setDraft(value); setErrors({}); setError('') }} onSave={save} onCancel={() => setDiscardOpen(true)} saving={saving} error={error} errors={errors} isNew />

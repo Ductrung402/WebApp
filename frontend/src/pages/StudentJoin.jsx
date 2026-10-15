@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { ArrowRight, BookOpen, CheckCircle2, DoorOpen, GraduationCap, LoaderCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle2, DoorOpen, LoaderCircle } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import FormField from '../components/FormField.jsx'
 import FormMessage from '../components/FormMessage.jsx'
@@ -67,23 +67,19 @@ export default function StudentJoin() {
   return (
     <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_440px] lg:gap-16">
       <section>
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700"><GraduationCap size={18} aria-hidden="true" /> Không gian học sinh</p>
-        <h1 className="mt-5 text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">Vào phòng thi,<br /><span className="text-brand-700">bắt đầu khám phá.</span></h1>
-        <p className="mt-5 max-w-md text-sm leading-7 text-slate-500 sm:text-base">Nhập họ tên và mã phòng giáo viên chia sẻ. Chỉ vài bước để sẵn sàng cho buổi thi của bạn.</p>
+        <h1 className="text-3xl font-bold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">Vào phòng thi</h1>
         <p className="mt-6 flex items-center gap-2 text-sm font-medium text-slate-600"><CheckCircle2 size={18} className="text-emerald-600" aria-hidden="true" /> Không cần tài khoản hoặc mật khẩu</p>
-        <div className="mt-8 hidden max-w-sm rounded-2xl border border-sky-100 bg-sky-50 p-5 lg:flex"><BookOpen size={23} className="mr-4 shrink-0 text-brand-700" aria-hidden="true" /><p className="text-sm leading-6 text-slate-600">Dùng đúng họ tên để giáo viên nhận ra bạn trong danh sách lớp.</p></div>
       </section>
 
       <section aria-labelledby="join-form-title" className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
-        <span className="inline-flex rounded-xl bg-sky-50 p-3 text-brand-700"><DoorOpen size={24} aria-hidden="true" /></span>
-        <h2 id="join-form-title" className="mt-4 text-xl font-semibold">Tham gia phòng thi</h2>
-        <p className="mb-6 mt-2 text-sm leading-6 text-slate-500">Mã phòng có 6 ký tự chữ in hoa và số.</p>
+        <span className="inline-flex rounded-xl bg-brand-50 p-3 text-brand-700"><DoorOpen size={24} aria-hidden="true" /></span>
+        <h2 id="join-form-title" className="mb-6 mt-4 text-xl font-semibold">Tham gia phòng thi</h2>
         {location.state?.notice && <div className="mb-5"><FormMessage>{location.state.notice}</FormMessage></div>}
         {storageError && <div className="mb-5"><FormMessage>{storageError}</FormMessage></div>}
         {session && (
-          <div className="mb-6 rounded-xl border border-sky-100 bg-sky-50 p-4">
+          <div className="mb-6 rounded-xl border border-brand-100 bg-brand-50 p-4">
             <p className="break-words text-sm font-semibold text-slate-800">Tiếp tục với {session.hoVaTen}</p>
-            <p className="mt-2 break-words text-xs text-slate-500">{session.tenLop} · Mã {session.maCodePhongThi}</p>
+            <p className="mt-2 break-words text-xs text-slate-600">{session.tenLop} · Mã {session.maCodePhongThi}</p>
             <Link to={`/exam-room/${session.maCodePhongThi}/waiting`} className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-brand-700">Tiếp tục phòng chờ <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
         )}
@@ -94,7 +90,7 @@ export default function StudentJoin() {
             <FormField name="maCodePhongThi" label="Mã phòng thi" placeholder="Ví dụ: AB12CD" autoComplete="off" autoCapitalize="characters" spellCheck={false} maxLength={6} value={values.maCodePhongThi} onChange={(event) => update('maCodePhongThi', normalizeRoomCode(event.target.value))} error={errors.maCodePhongThi} required />
           </fieldset>
           <button type="submit" disabled={joining} className="button-primary w-full !py-3.5">{joining ? <LoaderCircle size={18} className="animate-spin" aria-hidden="true" /> : <ArrowRight size={18} aria-hidden="true" />}{joining ? 'Đang vào phòng…' : 'Vào phòng thi'}</button>
-          {joining && <p role="status" className="text-sm text-slate-500">Đang kiểm tra mã và đưa bạn vào phòng thi…</p>}
+          {joining && <p role="status" className="text-sm text-slate-600">Đang kiểm tra mã và đưa bạn vào phòng thi…</p>}
         </form>
       </section>
     </div>

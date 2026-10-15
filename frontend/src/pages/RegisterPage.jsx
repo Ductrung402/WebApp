@@ -40,9 +40,9 @@ export default function RegisterPage() {
 
   return (
     <AuthLayout>
-      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">Bắt đầu cùng Quiz AI</p>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">Bắt đầu cùng EZam</p>
       <h1 className="text-3xl font-bold tracking-tight text-slate-900">Tạo tài khoản giáo viên</h1>
-      <p className="mt-3 text-sm leading-6 text-slate-500">Một khởi đầu mới cho những bài học đầy cảm hứng.</p>
+      <p className="mt-3 text-sm leading-6 text-slate-600">Tạo tài khoản EZam để soạn đề bằng AI và quản lý phòng thi của bạn.</p>
       <form onSubmit={submit} noValidate className="mt-7 space-y-4" aria-busy={busy}>
         <FormMessage>{error}</FormMessage>
         <FormField name="fullName" label="Họ và tên" autoComplete="name" required placeholder="Nguyễn Văn A" value={values.fullName} onChange={change} error={errors.fullName} disabled={busy} />
@@ -54,7 +54,7 @@ export default function RegisterPage() {
           {busy ? <><LoaderCircle size={18} className="animate-spin" aria-hidden="true" /> Đang tạo tài khoản…</> : <>Tạo tài khoản <ArrowRight size={18} aria-hidden="true" /></>}
         </button>
       </form>
-      <p className="mt-6 text-center text-sm text-slate-500">Đã có tài khoản? <Link to="/login" className="font-semibold text-brand-700 hover:underline">Đăng nhập</Link></p>
+      <p className="mt-6 text-center text-sm text-slate-600">Đã có tài khoản? <Link to="/login" className="font-semibold text-brand-700 hover:underline">Đăng nhập</Link></p>
     </AuthLayout>
   )
 }

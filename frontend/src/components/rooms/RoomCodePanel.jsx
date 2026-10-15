@@ -31,14 +31,13 @@ export default function RoomCodePanel({ code }) {
   }
 
   return (
-    <section aria-labelledby="room-code-title" className="rounded-2xl bg-sky-900 px-5 py-8 text-center text-white shadow-sm sm:px-8 sm:py-10">
-      <h2 id="room-code-title" className="text-xs font-semibold uppercase tracking-[0.2em] text-sky-200">Mã phòng thi</h2>
+    <section aria-labelledby="room-code-title" className="rounded-2xl bg-brand-800 px-5 py-8 text-center text-white shadow-sm sm:px-8 sm:py-10">
+      <h2 id="room-code-title" className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-400">Mã phòng thi</h2>
       <p data-testid="room-code" aria-label={`Mã phòng thi ${code}`} className="my-6 pl-[0.15em] font-mono text-5xl font-bold tracking-[0.15em] sm:my-8 sm:text-7xl">{code}</p>
-      <p className="text-sm leading-6 text-sky-100">Chia sẻ mã này để học sinh tham gia phòng thi.</p>
-      <button type="button" onClick={copyCode} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-semibold hover:bg-white/20">
+      <button type="button" onClick={copyCode} className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 bg-white/10 px-4 py-2.5 text-sm font-semibold hover:bg-white/20 focus-visible:outline-brand-400">
         {copied ? <Check size={17} aria-hidden="true" /> : <Copy size={17} aria-hidden="true" />}{copied ? 'Đã sao chép' : 'Sao chép mã'}
       </button>
-      <p role="status" className="mt-3 min-h-5 text-xs leading-5 text-sky-100">{message}</p>
+      <p role="status" className="mt-3 min-h-5 text-xs leading-5 text-brand-100">{message}</p>
     </section>
   )
 }

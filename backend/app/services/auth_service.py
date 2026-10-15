@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.core.security import create_access_token, hash_password, verify_password
 from app.models.models import GiaoVien
-from app.schemas.auth import TeacherLoginSchema, TeacherRegisterSchema, TeacherResponseSchema, TokenSchema
+from app.schemas.auth import ChangePasswordResponseSchema, ChangePasswordSchema, TeacherLoginSchema, TeacherRegisterSchema, TeacherResponseSchema, TeacherUpdateProfileSchema, TokenSchema
 
 _dummy_password_hash = hash_password("teacher-auth-dummy-password")
 
@@ -55,3 +55,57 @@ def login_teacher(db: Session, payload: TeacherLoginSchema) -> TokenSchema:
             headers={"WWW-Authenticate": "Bearer"},
         )
     return TokenSchema(access_token=create_access_token({"sub": teacher.id_gv}))
+
+
+def update_teacher_profile(
+    db: Session, teacher_id: str, payload: TeacherUpdateProfileSchema,
+) -> TeacherResponseSchema:
+    try:
+        teacher = db.scalar(
+            select(GiaoVien).where(GiaoVien.id_gv == teacher_id)
+            .with_for_update().execution_options(populate_existing=True)
+        )
+        if teacher is None:
+            raise HTTPException(status_code=404, detail="Teacher account not found.")
+        teacher.ho_ten = payload.ho_ten
+        teacher.truong = payload.truong
+        teacher.tinh = payload.tinh
+        db.flush()
+        response = TeacherResponseSchema.model_validate(teacher)
+        db.commit()
+        return response
+    except SQLAlchemyError as exc:
+        db.rollback()
+        raise HTTPException(status_code=503, detail="Unable to update teacher profile.") from exc
+    except Exception:
+        db.rollback()
+        raise
+
+
+def change_teacher_password(
+    db: Session, teacher_id: str, payload: ChangePasswordSchema,
+) -> ChangePasswordResponseSchema:
+    try:
+        teacher = db.scalar(
+            select(GiaoVien).where(GiaoVien.id_gv == teacher_id)
+            .with_for_update().execution_options(populate_existing=True)
+        )
+        if teacher is None:
+            raise HTTPException(status_code=404, detail="Teacher account not found.")
+        if not verify_password(payload.mat_khau_cu, teacher.mat_khau):
+            raise HTTPException(status_code=400, detail="Mật khẩu hiện tại không chính xác.")
+        teacher.mat_khau = hash_password(payload.mat_khau_moi)
+        db.flush()
+        response = ChangePasswordResponseSchema()
+        db.commit()
+        return response
+    except SQLAlchemyError as exc:
+        db.rollback()
+        raise HTTPException(status_code=503, detail="Unable to change teacher password.") from exc
+    except Exception:
+        db.rollback()
+        raise
+
+
+# Keep the existing service import available for callers of Task 6.5.
+change_password = change_teacher_password

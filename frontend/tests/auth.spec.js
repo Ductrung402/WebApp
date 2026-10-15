@@ -56,7 +56,7 @@ test('login sends backend payload and Bearer header, restores session and logs o
   await fillLogin(page)
   expect((await loginRequest).postDataJSON()).toEqual({ email: 'teacher@example.com', mat_khau: 'TeacherPass123!' })
   await expect(page).toHaveURL(/\/dashboard$/)
-  await expect(page.getByRole('heading', { name: 'Xin chào, Nguyễn Văn A!' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Hồ sơ giáo viên', level: 1 })).toBeVisible()
   expect(await page.evaluate((key) => localStorage.getItem(key), tokenKey)).toBe('valid-test-token')
   expect(await page.evaluate(() => JSON.stringify(localStorage))).not.toContain('TeacherPass123!')
   const meRequest = page.waitForRequest((request) => request.url().endsWith('/api/auth/me') && request.method() === 'GET')

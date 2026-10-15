@@ -8,10 +8,9 @@ from sqlalchemy.orm import sessionmaker
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 # Cấu hình chuỗi kết nối (hỗ trợ đọc từ biến môi trường DATABASE_URL nếu có)
-SQLALCHEMY_DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://postgres:1@localhost:5432/WebApp"
-)
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL")
+if not SQLALCHEMY_DATABASE_URL:
+    raise RuntimeError("Set DATABASE_URL in the environment or backend/.env.")
 
 # Tạo Engine kết nối
 engine = create_engine(SQLALCHEMY_DATABASE_URL)

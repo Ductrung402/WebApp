@@ -43,8 +43,8 @@ export default function ExamEditPage() {
   }
   return (
     <>
-      <Link to={`/exams/${encodeURIComponent(examId)}`} className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-700"><ArrowLeft size={16} aria-hidden="true" /> Chi tiết đề thi</Link>
-      <h1 className="text-3xl font-bold tracking-tight">Chỉnh sửa đề thi</h1><p className="mb-7 mt-3 text-sm text-slate-500">Rà soát nội dung và chọn đáp án đúng cho từng câu hỏi.</p>
+      <Link to={`/exams/${encodeURIComponent(examId)}`} className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-brand-700"><ArrowLeft size={16} aria-hidden="true" /> Chi tiết đề thi</Link>
+      <h1 className="text-3xl font-bold tracking-tight">Chỉnh sửa đề thi</h1><p className="mb-7 mt-3 text-sm text-slate-600">Rà soát nội dung và chọn đáp án đúng cho từng câu hỏi.</p>
       {loading ? <ExamLoading /> : loadError ? <div className="space-y-4"><FormMessage>{loadError}</FormMessage><button type="button" onClick={retry} className="button-secondary">Thử lại</button></div> : draft && (
         <ExamEditor draft={draft} onChange={(value) => { setDraft(value); setDirty(true); setErrors({}); setError('') }} onSave={save} onCancel={() => navigate(`/exams/${encodeURIComponent(examId)}`)} saving={saving} error={error} errors={errors} />
       )}

@@ -12,7 +12,7 @@ export default function RoomCreatePage() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const requestedExamId = searchParams.get('examId') || ''
-  const [values, setValues] = useState({ idDeThi: requestedExamId, tenLop: '', thoiGianLamBai: '30' })
+  const [values, setValues] = useState({ idDeThi: requestedExamId, tenLop: '', thoiGianLamBai: '' })
   const [exams, setExams] = useState([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
@@ -78,14 +78,13 @@ export default function RoomCreatePage() {
 
   return (
     <>
-      <Link to="/exams" className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-brand-700"><ArrowLeft size={16} aria-hidden="true" /> Kho đề thi</Link>
+      <Link to="/exams" className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-brand-700"><ArrowLeft size={16} aria-hidden="true" /> Kho đề thi</Link>
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">Phòng thi</p>
-      <h1 className="mt-3 text-3xl font-bold tracking-tight">Khởi tạo phòng thi</h1>
-      <p className="mb-8 mt-3 text-sm leading-6 text-slate-500">Chọn một đề đã lưu và thiết lập buổi thi cho lớp của bạn.</p>
+      <h1 className="mb-8 mt-3 text-3xl font-bold tracking-tight">Khởi tạo phòng thi</h1>
       {loading ? <RoomLoading label="Đang tải kho đề thi" /> : loadError ? (
         <div className="space-y-4"><FormMessage>{loadError}</FormMessage><button type="button" onClick={() => setVersion((value) => value + 1)} className="button-secondary">Thử lại</button></div>
       ) : !hasExams ? (
-        <section className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center"><DoorOpen size={36} className="mx-auto text-brand-700" aria-hidden="true" /><h2 className="mt-5 text-lg font-semibold">Chưa có đề thi để tạo phòng</h2><p className="mt-3 text-sm leading-6 text-slate-500">Hãy lưu một đề thi có câu hỏi vào kho trước khi tạo phòng.</p><Link to="/exams/create-ai" className="button-primary mt-6">Tạo đề bằng AI</Link></section>
+        <section className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-12 text-center"><DoorOpen size={36} className="mx-auto text-brand-700" aria-hidden="true" /><h2 className="mt-5 text-lg font-semibold">Chưa có đề thi để tạo phòng</h2><p className="mt-3 text-sm leading-6 text-slate-600">Hãy lưu một đề thi có câu hỏi vào kho trước khi tạo phòng.</p><Link to="/exams/create-ai" className="button-primary mt-6">Tạo đề bằng AI</Link></section>
       ) : (
         <div className="grid items-start gap-6 xl:grid-cols-[minmax(0,1fr)_280px]">
           <form noValidate onSubmit={submit} className="space-y-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7" aria-busy={creating}>
@@ -99,19 +98,18 @@ export default function RoomCreatePage() {
                 </select>
                 {errors.idDeThi && <p id="idDeThi-error" className="mt-2 text-xs text-rose-700">{errors.idDeThi}</p>}
               </div>
-              <FormField name="tenLop" label="Tên lớp / nhóm" placeholder="Ví dụ: Lớp 6A" value={values.tenLop} onChange={(event) => update('tenLop', event.target.value)} error={errors.tenLop} required />
+              <FormField name="tenLop" label="Tên lớp" value={values.tenLop} onChange={(event) => update('tenLop', event.target.value)} error={errors.tenLop} required />
               <FormField name="thoiGianLamBai" label="Thời gian làm bài (phút)" type="number" min="1" max="2147483647" step="1" value={values.thoiGianLamBai} onChange={(event) => update('thoiGianLamBai', event.target.value)} error={errors.thoiGianLamBai} required />
             </fieldset>
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-5">
-              <button type="button" disabled={creating} onClick={() => setVersion((value) => value + 1)} className="text-sm font-medium text-slate-500 hover:text-brand-700 disabled:opacity-50"><RefreshCw size={14} className="mr-1.5 inline" aria-hidden="true" />Tải lại kho đề</button>
+              <button type="button" disabled={creating} onClick={() => setVersion((value) => value + 1)} className="text-sm font-medium text-slate-600 hover:text-brand-700 disabled:opacity-50"><RefreshCw size={14} className="mr-1.5 inline" aria-hidden="true" />Tải lại kho đề</button>
               <button type="submit" disabled={creating} className="button-primary">{creating ? <LoaderCircle size={18} className="animate-spin" aria-hidden="true" /> : <DoorOpen size={18} aria-hidden="true" />}{creating ? 'Đang tạo phòng…' : 'Tạo phòng'}</button>
             </div>
-            {creating && <p role="status" className="text-sm text-slate-500">Đang khởi tạo phòng thi và cấp mã phòng…</p>}
+            {creating && <p role="status" className="text-sm text-slate-600">Đang khởi tạo phòng thi và cấp mã phòng…</p>}
           </form>
-          <aside className="rounded-2xl border border-sky-100 bg-sky-50/70 p-6">
-            <Clock3 size={24} className="text-brand-700" aria-hidden="true" /><h2 className="mt-4 font-semibold">Sẵn sàng cho buổi thi</h2>
-            <p className="mt-3 text-sm leading-6 text-slate-600">Sau khi tạo, bạn sẽ nhận được mã phòng gồm 6 ký tự để chia sẻ với học sinh.</p>
-            {selected && <div className="mt-5 border-t border-sky-100 pt-4"><p className="break-words text-sm font-semibold">{selected.tenDeThi}</p><p className="mt-2 text-xs text-slate-500">{selected.soLuongCauHoi} câu hỏi{selected.khoi ? ` · Khối ${selected.khoi}` : ''}</p></div>}
+          <aside className="rounded-2xl border border-brand-100 bg-brand-50/70 p-6">
+            <Clock3 size={24} className="text-brand-700" aria-hidden="true" /><h2 className="mt-4 font-semibold">Đề thi đã chọn</h2>
+            {selected && <div className="mt-5 border-t border-brand-100 pt-4"><p className="break-words text-sm font-semibold">{selected.tenDeThi}</p><p className="mt-2 text-xs text-slate-600">{selected.soLuongCauHoi} câu hỏi{selected.khoi ? ` · Khối ${selected.khoi}` : ''}</p></div>}
           </aside>
         </div>
       )}

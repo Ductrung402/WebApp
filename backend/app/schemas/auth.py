@@ -56,3 +56,28 @@ class TeacherResponseSchema(BaseModel):
 class TokenSchema(BaseModel):
     access_token: str
     token_type: Literal["bearer"] = "bearer"
+
+
+class TeacherUpdateProfileSchema(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    ho_ten: NonEmptyString
+    truong: Optional[str] = None
+    tinh: Optional[str] = None
+
+    @field_validator("truong", "tinh")
+    @classmethod
+    def normalize_optional_text(cls, value: Optional[str]) -> Optional[str]:
+        return value.strip() or None if value is not None else None
+
+
+class ChangePasswordSchema(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    mat_khau_cu: Password
+    mat_khau_moi: Password
+
+
+class ChangePasswordResponseSchema(BaseModel):
+    status: Literal["ok"] = "ok"
+    message: Literal["Đã cập nhật mật khẩu."] = "Đã cập nhật mật khẩu."

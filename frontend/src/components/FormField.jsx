@@ -13,13 +13,13 @@ export default function FormField({ name, label, type = 'text', error, hint, ...
           aria-invalid={Boolean(error)} aria-describedby={error ? `${name}-error` : hint ? `${name}-hint` : undefined} {...props} />
         {isPassword && (
           <button type="button" onClick={() => setVisible(!visible)} aria-label={visible ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
-            aria-pressed={visible} className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-slate-500 hover:text-brand-700">
+            aria-pressed={visible} className="absolute right-3 top-1/2 -translate-y-1/2 rounded p-1 text-slate-600 hover:text-brand-700">
             {visible ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
           </button>
         )}
       </div>
       {error && <p id={`${name}-error`} className="mt-2 text-xs text-rose-700">{error}</p>}
-      {!error && hint && <p id={`${name}-hint`} className="mt-2 text-xs text-slate-500">{hint}</p>}
+      {!error && hint && <p id={`${name}-hint`} className="mt-2 text-xs text-slate-600">{hint}</p>}
     </div>
   )
 }

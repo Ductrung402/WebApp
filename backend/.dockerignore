@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+.runtime
+__pycache__
+**/__pycache__
+*.pyc
+**/*.pyc
+tests
+verify_*.py

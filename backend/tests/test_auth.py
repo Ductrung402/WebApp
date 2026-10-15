@@ -183,6 +183,236 @@ class TeacherAuthTests(unittest.TestCase):
         with self.session_factory() as db:
             self.assertEqual(db.scalar(select(func.count()).select_from(GiaoVien)), 0)
 
+    def profile_headers(self):
+        teacher = self.register()
+        return teacher, {"Authorization": "Bearer " + self.login()["access_token"]}
+
+    def test_profile_update_persists_without_changing_credentials_or_other_teacher(self):
+        teacher, headers = self.profile_headers()
+        with self.session_factory() as db:
+            original_hash = db.get(GiaoVien, teacher["id_gv"]).mat_khau
+            other = GiaoVien(email="other@example.com", mat_khau=original_hash, ho_ten="Other teacher")
+            db.add(other)
+            db.commit()
+            other_id = other.id_gv
+        payload = {"ho_ten": "  Updated teacher  ", "truong": "  New school  ", "tinh": "  New city  "}
+        response = self.client.put("/api/auth/profile", json=payload, headers=headers)
+        self.assertEqual(response.status_code, 200, response.text)
+        expected = {**teacher, "ho_ten": "Updated teacher", "truong": "New school", "tinh": "New city"}
+        self.assertEqual(response.json(), expected)
+        self.assertNotIn("mat_khau", response.json())
+        self.assertEqual(self.client.get("/api/auth/me", headers=headers).json(), expected)
+        with self.session_factory() as db:
+            stored = db.get(GiaoVien, teacher["id_gv"])
+            self.assertEqual((stored.ho_ten, stored.truong, stored.tinh), ("Updated teacher", "New school", "New city"))
+            self.assertEqual(stored.mat_khau, original_hash)
+            self.assertEqual(stored.email, teacher["email"])
+            self.assertEqual(db.get(GiaoVien, other_id).ho_ten, "Other teacher")
+        self.assertEqual(self.login()["token_type"], "bearer")
+
+    def test_profile_optional_fields_can_be_cleared_or_omitted(self):
+        _, headers = self.profile_headers()
+        for payload in [
+            {"ho_ten": "Teacher", "truong": None, "tinh": None},
+            {"ho_ten": "Teacher", "truong": "  ", "tinh": ""},
+            {"ho_ten": "Teacher"},
+        ]:
+            with self.subTest(payload=payload):
+                response = self.client.put("/api/auth/profile", json=payload, headers=headers)
+                self.assertEqual(response.status_code, 200, response.text)
+                self.assertIsNone(response.json()["truong"])
+                self.assertIsNone(response.json()["tinh"])
+
+    def test_profile_requires_valid_teacher_jwt(self):
+        teacher, _ = self.profile_headers()
+        for headers in [
+            {}, {"Authorization": "Basic abc"}, {"Authorization": "Bearer broken"},
+            {"Authorization": "Bearer " + create_access_token({"sub": "unknown-teacher"})},
+            {"Authorization": "Bearer " + create_access_token({"sub": teacher["id_gv"]}, timedelta(seconds=-60))},
+        ]:
+            with self.subTest(headers_present=bool(headers)):
+                response = self.client.put("/api/auth/profile", json={"ho_ten": "Unauthorized"}, headers=headers)
+                self.assertEqual(response.status_code, 401)
+        with self.session_factory() as db:
+            self.assertEqual(db.get(GiaoVien, teacher["id_gv"]).ho_ten, teacher["ho_ten"])
+
+    def test_invalid_profile_inputs_do_not_commit(self):
+        teacher, headers = self.profile_headers()
+        invalid = [
+            {}, {"ho_ten": "  "}, {"ho_ten": None}, {"ho_ten": 123},
+            {"ho_ten": "Teacher", "truong": 123}, {"ho_ten": "Teacher", "tinh": []},
+            {"ho_ten": "Teacher", "email": "hijack@example.com"},
+            {"ho_ten": "Teacher", "id_gv": "another-teacher"},
+            {"ho_ten": "Teacher", "mat_khau": "NewPassword123!"},
+        ]
+        with patch.object(Session, "commit", side_effect=AssertionError("Invalid profile committed")):
+            for payload in invalid:
+                with self.subTest(payload=payload):
+                    self.assertEqual(self.client.put("/api/auth/profile", json=payload, headers=headers).status_code, 422)
+        with self.session_factory() as db:
+            self.assertEqual(db.get(GiaoVien, teacher["id_gv"]).ho_ten, teacher["ho_ten"])
+
+    def test_profile_commit_failure_rolls_back_flushed_update(self):
+        teacher, headers = self.profile_headers()
+        original_rollback = Session.rollback
+        with patch.object(Session, "commit", side_effect=SQLAlchemyError("simulated commit failure")), patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            response = self.client.put("/api/auth/profile", json={"ho_ten": "Not committed", "truong": "New school"}, headers=headers)
+            self.assertEqual(response.status_code, 503)
+            rollback.assert_called_once()
+        self.assertEqual(self.client.get("/api/auth/me", headers=headers).json(), teacher)
+
+    def test_profile_response_failure_rolls_back_before_commit(self):
+        teacher, headers = self.profile_headers()
+        original_rollback = Session.rollback
+        with patch("app.services.auth_service.TeacherResponseSchema.model_validate", side_effect=RuntimeError("simulated response failure")), patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            with self.assertRaises(RuntimeError):
+                self.client.put("/api/auth/profile", json={"ho_ten": "Not committed"}, headers=headers)
+            rollback.assert_called_once()
+        self.assertEqual(self.client.get("/api/auth/me", headers=headers).json(), teacher)
+
+    def test_profile_query_failure_rolls_back(self):
+        teacher, headers = self.profile_headers()
+        original_rollback = Session.rollback
+        with patch.object(Session, "scalar", side_effect=SQLAlchemyError("simulated query failure")), patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            response = self.client.put("/api/auth/profile", json={"ho_ten": "Not committed"}, headers=headers)
+            self.assertEqual(response.status_code, 503)
+            rollback.assert_called_once()
+        self.assertEqual(self.client.get("/api/auth/me", headers=headers).json(), teacher)
+
+    def test_profile_missing_locked_row_returns_404_and_rolls_back(self):
+        teacher, headers = self.profile_headers()
+        original_rollback = Session.rollback
+        with patch.object(Session, "scalar", return_value=None), patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            response = self.client.put("/api/auth/profile", json={"ho_ten": "Not committed"}, headers=headers)
+            self.assertEqual(response.status_code, 404)
+            rollback.assert_called_once()
+        self.assertEqual(self.client.get("/api/auth/me", headers=headers).json(), teacher)
+
+    def test_profile_openapi_contract(self):
+        spec = self.client.get("/openapi.json").json()
+        operation = spec["paths"]["/api/auth/profile"]["put"]
+        self.assertEqual(operation["security"], [{"HTTPBearer": []}])
+        schema = spec["components"]["schemas"]["TeacherUpdateProfileSchema"]
+        self.assertEqual(schema["required"], ["ho_ten"])
+        self.assertEqual(set(schema["properties"]), {"ho_ten", "truong", "tinh"})
+        self.assertFalse(schema["additionalProperties"])
+
+    def test_change_password_stores_bcrypt_and_accepts_only_new_password_on_login(self):
+        teacher, headers = self.profile_headers()
+        new_password = "NewTeacherPass456!"
+        response = self.client.put("/api/auth/change-password", headers=headers, json={
+            "mat_khau_cu": self.payload["mat_khau"], "mat_khau_moi": new_password,
+        })
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json(), {"status": "ok", "message": "Đã cập nhật mật khẩu."})
+        self.assertNotIn(new_password, response.text)
+        with self.session_factory() as db:
+            stored = db.get(GiaoVien, teacher["id_gv"])
+            self.assertTrue(stored.mat_khau.startswith("$2b$"))
+            self.assertTrue(verify_password(new_password, stored.mat_khau))
+            self.assertFalse(verify_password(self.payload["mat_khau"], stored.mat_khau))
+            self.assertEqual(stored.email, teacher["email"])
+            self.assertEqual(stored.ho_ten, teacher["ho_ten"])
+        for password, expected_status in [(self.payload["mat_khau"], 401), (new_password, 200)]:
+            login = self.client.post("/api/auth/login", json={"email": self.payload["email"], "mat_khau": password})
+            self.assertEqual(login.status_code, expected_status)
+        # Password changes do not alter the existing JWT contract.
+        self.assertEqual(self.client.get("/api/auth/me", headers=headers).status_code, 200)
+
+    def test_change_password_wrong_current_password_returns_precise_error_and_rolls_back(self):
+        teacher, headers = self.profile_headers()
+        original_rollback = Session.rollback
+        with self.session_factory() as db:
+            original_hash = db.get(GiaoVien, teacher["id_gv"]).mat_khau
+        with patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            response = self.client.put("/api/auth/change-password", headers=headers, json={
+                "mat_khau_cu": "WrongCurrent123!", "mat_khau_moi": "NewTeacherPass456!",
+            })
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.json()["detail"], "Mật khẩu hiện tại không chính xác.")
+            rollback.assert_called_once()
+        with self.session_factory() as db:
+            self.assertEqual(db.get(GiaoVien, teacher["id_gv"]).mat_khau, original_hash)
+
+    def test_change_password_invalid_inputs_cannot_commit(self):
+        _, headers = self.profile_headers()
+        valid = {"mat_khau_cu": self.payload["mat_khau"], "mat_khau_moi": "NewTeacherPass456!"}
+        invalid = [{}, {"mat_khau_cu": self.payload["mat_khau"]}, {**valid, "id_gv": "someone-else"}, {**valid, "email": "other@example.com"}]
+        for field in ["mat_khau_cu", "mat_khau_moi"]:
+            invalid.extend({**valid, field: value} for value in [None, 123, "short", "x" * 73, "é" * 37, "password\x00"])
+        with patch.object(Session, "commit", side_effect=AssertionError("Invalid password committed")):
+            for index, payload in enumerate(invalid):
+                with self.subTest(case=index):
+                    self.assertEqual(self.client.put("/api/auth/change-password", headers=headers, json=payload).status_code, 422)
+        self.assertEqual(self.login()["token_type"], "bearer")
+
+    def test_change_password_requires_teacher_jwt(self):
+        teacher, _ = self.profile_headers()
+        for headers in [{}, {"Authorization": "Bearer broken"}, {"Authorization": "Bearer " + create_access_token({"sub": "someone-else"})}]:
+            response = self.client.put("/api/auth/change-password", headers=headers, json={
+                "mat_khau_cu": self.payload["mat_khau"], "mat_khau_moi": "NewTeacherPass456!",
+            })
+            self.assertEqual(response.status_code, 401)
+        self.assertEqual(self.login()["token_type"], "bearer")
+
+    def test_change_password_commit_failure_rolls_back_hash(self):
+        teacher, headers = self.profile_headers()
+        with self.session_factory() as db:
+            original_hash = db.get(GiaoVien, teacher["id_gv"]).mat_khau
+        original_rollback = Session.rollback
+        with patch.object(Session, "commit", side_effect=SQLAlchemyError("simulated commit failure")), patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            response = self.client.put("/api/auth/change-password", headers=headers, json={
+                "mat_khau_cu": self.payload["mat_khau"], "mat_khau_moi": "NewTeacherPass456!",
+            })
+            self.assertEqual(response.status_code, 503)
+            rollback.assert_called_once()
+        with self.session_factory() as db:
+            self.assertEqual(db.get(GiaoVien, teacher["id_gv"]).mat_khau, original_hash)
+        self.assertEqual(self.login()["token_type"], "bearer")
+
+    def test_change_password_hashing_failure_rolls_back(self):
+        _, headers = self.profile_headers()
+        original_rollback = Session.rollback
+        with patch("app.services.auth_service.hash_password", side_effect=RuntimeError("simulated hash failure")), patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            with self.assertRaises(RuntimeError):
+                self.client.put("/api/auth/change-password", headers=headers, json={
+                    "mat_khau_cu": self.payload["mat_khau"], "mat_khau_moi": "NewTeacherPass456!",
+                })
+            rollback.assert_called_once()
+        self.assertEqual(self.login()["token_type"], "bearer")
+
+    def test_change_password_query_failure_rolls_back(self):
+        _, headers = self.profile_headers()
+        original_rollback = Session.rollback
+        with patch.object(Session, "scalar", side_effect=SQLAlchemyError("simulated query failure")), patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            response = self.client.put("/api/auth/change-password", headers=headers, json={
+                "mat_khau_cu": self.payload["mat_khau"], "mat_khau_moi": "NewTeacherPass456!",
+            })
+            self.assertEqual(response.status_code, 503)
+            rollback.assert_called_once()
+
+    def test_change_password_missing_locked_teacher_rolls_back(self):
+        _, headers = self.profile_headers()
+        original_rollback = Session.rollback
+        with patch.object(Session, "scalar", return_value=None), patch.object(Session, "rollback", autospec=True, side_effect=original_rollback) as rollback:
+            response = self.client.put("/api/auth/change-password", headers=headers, json={
+                "mat_khau_cu": self.payload["mat_khau"], "mat_khau_moi": "NewTeacherPass456!",
+            })
+            self.assertEqual(response.status_code, 404)
+            rollback.assert_called_once()
+
+    def test_change_password_schema_hides_values_and_requires_both_fields(self):
+        from app.schemas.auth import ChangePasswordSchema
+        payload = ChangePasswordSchema(mat_khau_cu="CurrentPass123!", mat_khau_moi="NewTeacherPass456!")
+        self.assertNotIn("CurrentPass123!", repr(payload))
+        self.assertNotIn("NewTeacherPass456!", repr(payload))
+        spec = self.client.get("/openapi.json").json()
+        self.assertEqual(spec["paths"]["/api/auth/change-password"]["put"]["security"], [{"HTTPBearer": []}])
+        schema = spec["components"]["schemas"]["ChangePasswordSchema"]
+        self.assertEqual(set(schema["required"]), {"mat_khau_cu", "mat_khau_moi"})
+        self.assertEqual(set(schema["properties"]), {"mat_khau_cu", "mat_khau_moi"})
+        self.assertFalse(schema["additionalProperties"])
+
     def test_password_hash_helpers_reject_invalid_hash_and_long_password(self):
         self.assertFalse(verify_password("TeacherPass123!", "plain-text-or-invalid-hash"))
         with self.assertRaises(ValueError):

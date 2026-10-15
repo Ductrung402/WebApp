@@ -7,7 +7,7 @@ export default function QuestionEditor({ question, index, onChange, onRemove, ca
     <section className="rounded-2xl border border-slate-200 bg-white p-5 sm:p-6" aria-labelledby={`question-title-${number}`}>
       <div className="mb-5 flex items-center justify-between">
         <h3 id={`question-title-${number}`} className="font-semibold">Câu {number}</h3>
-        <button type="button" onClick={onRemove} disabled={disabled || !canRemove} aria-label={`Xóa câu ${number}`} className="rounded-lg p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-700 disabled:opacity-30"><Trash2 size={17} aria-hidden="true" /></button>
+        <button type="button" onClick={onRemove} disabled={disabled || !canRemove} aria-label={`Xóa câu ${number}`} className="rounded-lg p-2 text-slate-600 hover:bg-rose-50 hover:text-rose-700 disabled:opacity-30"><Trash2 size={17} aria-hidden="true" /></button>
       </div>
       <label htmlFor={`question-${number}`} className="mb-2 block text-sm font-medium text-slate-700">Nội dung câu hỏi {number}</label>
       <textarea id={`question-${number}`} className="input-field min-h-24 resize-y" value={question.noiDung} onChange={(event) => onChange('noiDung', event.target.value)} disabled={disabled} aria-invalid={Boolean(errors.noiDung)} aria-describedby={errors.noiDung ? `question-error-${number}` : undefined} />

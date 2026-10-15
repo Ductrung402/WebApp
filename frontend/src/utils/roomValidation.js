@@ -1,6 +1,6 @@
 export const ROOM_STATUS = {
   DANG_CHO: { label: 'Đang chờ học sinh', className: 'bg-amber-50 text-amber-800 ring-amber-200' },
-  DANG_THI: { label: 'ĐANG THI', className: 'bg-sky-50 text-brand-700 ring-sky-200' },
+  DANG_THI: { label: 'ĐANG THI', className: 'bg-brand-50 text-brand-700 ring-brand-200' },
   DA_DONG: { label: 'Đã đóng', className: 'bg-slate-100 text-slate-600 ring-slate-200' },
 }
 

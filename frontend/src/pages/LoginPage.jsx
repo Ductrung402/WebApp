@@ -41,20 +41,20 @@ export default function LoginPage() {
 
   return (
     <AuthLayout>
-      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">Chào mừng trở lại</p>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-brand-700">Chào mừng bạn đến với EZam</p>
       <h1 className="text-3xl font-bold tracking-tight text-slate-900">Đăng nhập</h1>
-      <p className="mt-3 text-sm leading-6 text-slate-500">Tiếp tục hành trình dạy học trong không gian của bạn.</p>
+      <p className="mt-3 text-sm leading-6 text-slate-600">Đăng nhập tài khoản EZam để tiếp tục hành trình dạy học của bạn.</p>
       <form onSubmit={submit} noValidate className="mt-8 space-y-5" aria-busy={busy}>
         {location.state?.registrationSuccess && <FormMessage success>Tài khoản đã được tạo. Hãy đăng nhập để tiếp tục.</FormMessage>}
         {sessionNotice && <FormMessage>{sessionNotice}</FormMessage>}
         <FormMessage>{error}</FormMessage>
-        <FormField name="email" label="Email" type="email" autoComplete="username" required placeholder="giaovien@example.com" value={values.email} onChange={change} error={errors.email} disabled={busy} />
+        <FormField name="email" label="Email" type="email" autoComplete="username"  value={values.email} onChange={change} error={errors.email} disabled={busy} />
         <FormField name="password" label="Mật khẩu" type="password" autoComplete="current-password" required value={values.password} onChange={change} error={errors.password} disabled={busy} />
         <button type="submit" className="button-primary w-full" disabled={busy}>
           {busy ? <><LoaderCircle size={18} className="animate-spin" aria-hidden="true" /> Đang đăng nhập…</> : <>Đăng nhập <ArrowRight size={18} aria-hidden="true" /></>}
         </button>
       </form>
-      <p className="mt-7 text-center text-sm text-slate-500">Chưa có tài khoản? <Link to="/register" className="font-semibold text-brand-700 hover:underline">Tạo tài khoản</Link></p>
+      <p className="mt-7 text-center text-sm text-slate-600">Chưa có tài khoản? <Link to="/register" className="font-semibold text-brand-700 hover:underline">Tạo tài khoản</Link></p>
     </AuthLayout>
   )
 }

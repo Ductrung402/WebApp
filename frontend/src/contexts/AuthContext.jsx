@@ -97,9 +97,12 @@ export function AuthProvider({ children }) {
   }, [])
 
   const register = useCallback((profile) => registerTeacher(profile), [])
+  const updateTeacher = useCallback((newInfo) => {
+    setTeacher((current) => current && current.idGv === newInfo.idGv ? newInfo : current)
+  }, [])
   const value = useMemo(() => ({
-    teacher, status, sessionError, sessionNotice, login, logout, register, refreshSession,
-  }), [teacher, status, sessionError, sessionNotice, login, logout, register, refreshSession])
+    teacher, status, sessionError, sessionNotice, login, logout, register, refreshSession, updateTeacher,
+  }), [teacher, status, sessionError, sessionNotice, login, logout, register, refreshSession, updateTeacher])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

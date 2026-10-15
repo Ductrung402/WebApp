@@ -34,3 +34,21 @@ export async function getCurrentTeacher() {
   const { data } = await apiClient.get('/api/auth/me')
   return toTeacher(data)
 }
+
+export async function updateProfile({ fullName, school, province }, signal) {
+  const { data } = await apiClient.put('/api/auth/profile', {
+    ho_ten: fullName.trim(),
+    truong: school.trim() || null,
+    tinh: province.trim() || null,
+  }, { signal })
+  return toTeacher(data)
+}
+
+export async function changePassword({ currentPassword, newPassword }, signal) {
+  const { data } = await apiClient.put('/api/auth/change-password', {
+    mat_khau_cu: currentPassword,
+    mat_khau_moi: newPassword,
+  }, { signal })
+  if (data.status !== 'ok') throw new Error('Phản hồi đổi mật khẩu không hợp lệ.')
+  return data
+}

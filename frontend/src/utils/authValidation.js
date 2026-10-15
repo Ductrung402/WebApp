@@ -20,3 +20,18 @@ export function getAuthError(error) {
   if (error.isAxiosError) return 'Không thể kết nối tới máy chủ. Vui lòng kiểm tra kết nối và thử lại.'
   return error.message || 'Đã có lỗi xảy ra. Vui lòng thử lại.'
 }
+
+export function validatePasswordForm(values) {
+  const errors = {}
+  for (const field of ['currentPassword', 'newPassword']) {
+    const password = values[field]
+    if (Array.from(password).length < 8) {
+      errors[field] = 'Mật khẩu cần ít nhất 8 ký tự.'
+    } else if (new TextEncoder().encode(password).length > 72 || password.includes('\0')) {
+      errors[field] = 'Mật khẩu tối đa 72 byte và không chứa ký tự null.'
+    }
+  }
+  if (!values.confirmPassword) errors.confirmPassword = 'Vui lòng xác nhận mật khẩu mới.'
+  else if (values.confirmPassword !== values.newPassword) errors.confirmPassword = 'Mật khẩu xác nhận không khớp.'
+  return errors
+}
