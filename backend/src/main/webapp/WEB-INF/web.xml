@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee https://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+         version="4.0"
+         metadata-complete="false">
+    <display-name>EZam</display-name>
+    <description>EZam Java 17 MVC backend running on Apache Tomcat 9.</description>
+    <request-character-encoding>UTF-8</request-character-encoding>
+    <response-character-encoding>UTF-8</response-character-encoding>
+    <filter><filter-name>CorsFilter</filter-name><filter-class>com.ezam.filter.CorsFilter</filter-class></filter>
+    <filter><filter-name>JwtAuthFilter</filter-name><filter-class>com.ezam.filter.JwtAuthFilter</filter-class></filter>
+    <filter><filter-name>ExamValidationFilter</filter-name><filter-class>com.ezam.filter.ExamValidationFilter</filter-class></filter>
+    <filter><filter-name>RoomValidationFilter</filter-name><filter-class>com.ezam.filter.RoomValidationFilter</filter-class></filter>
+    <filter-mapping><filter-name>CorsFilter</filter-name><url-pattern>/api/*</url-pattern></filter-mapping>
+    <filter-mapping><filter-name>ExamValidationFilter</filter-name><url-pattern>/api/exams/*</url-pattern></filter-mapping>
+    <filter-mapping><filter-name>RoomValidationFilter</filter-name><url-pattern>/api/rooms/*</url-pattern></filter-mapping>
+    <filter-mapping><filter-name>JwtAuthFilter</filter-name><url-pattern>/api/*</url-pattern></filter-mapping>
+    <!-- Register implemented servlets/filters/listeners here, or use annotations.
+         No nonexistent classes or placeholder API mappings are registered. -->
+</web-app>

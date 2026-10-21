@@ -1,0 +1,10 @@
+{
+  "synthetic": true,
+  "generatedBy": "legacy ExamRuntimeStore with Pydantic v2",
+  "sourceSha256": {
+    "app/core/exam_runtime.py": "cd4fc9086be7d82cdfcb8a42ed423ee265596d61723b8c181e0b7dcf1e30f761",
+    "app/schemas/exam_flow.py": "148569af105ad74a78714c01ddc90bbb729d245f580a2aa7b5f036ac3e529e88",
+    "app/schemas/socket.py": "273c26a849fc5e0a0c508eb01399b76cba3c2efd6956092111eaded0e1292e3c",
+    "app/schemas/submission.py": "c58e91c8f7d48467e857c1b06c3c41933e844d0cce0334bbbd656f8d0e7a14ba"
+  }
+}

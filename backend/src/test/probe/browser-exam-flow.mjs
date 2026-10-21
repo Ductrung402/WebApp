@@ -1,0 +1,54 @@
+import {createRequire} from 'node:module'
+import {dirname,resolve} from 'node:path'
+import {fileURLToPath,pathToFileURL} from 'node:url'
+import {randomUUID} from 'node:crypto'
+import {writeFile,readFile} from 'node:fs/promises'
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'../../../..');process.chdir(resolve(root,'frontend'))
+const require=createRequire(resolve(root,'frontend/package.json'));const {chromium,expect}=require('@playwright/test')
+let input='';for await(const c of process.stdin)input+=c
+const {apiBase,socketBase,mode}=JSON.parse(input);for(const url of [apiBase,socketBase])if(!/^http:\/\/127\.0\.0\.1:\d+$/.test(url))throw Error('Loopback only')
+process.env.VITE_API_BASE_URL=apiBase;process.env.VITE_SOCKET_URL=socketBase
+const {createServer}=await import(pathToFileURL(resolve(root,'frontend/node_modules/vite/dist/node/index.js')).href)
+let vite,browser,stage='setup';const proof={backend:'actual Tomcat/Netty/PostgreSQL',frontend:'unchanged React/Chrome',provider:'not used'}
+const req=async(path,body,token)=>{const r=await fetch(apiBase+path,{method:'POST',headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{})},body:JSON.stringify(body)});if(!r.ok)throw Error('Fixture failed');return r.json()}
+try{
+ vite=await createServer({root:resolve(root,'frontend'),logLevel:'silent',server:{host:'localhost',port:5173,strictPort:true}});await vite.listen()
+ const email=`live-browser-${randomUUID()}@example.com`,password='synthetic-browser-password';await req('/api/auth/register',{email,mat_khau:password,ho_ten:'Live Browser'});const {access_token:token}=await req('/api/auth/login',{email,mat_khau:password});const exam=await req('/api/exams',{tenDeThi:'Đề trực tuyến',cauHoiList:[{noiDung:'Công thức của nước?',dapAnA:'H2O',dapAnB:'CO2',dapAnC:'O2',dapAnD:'N2',dapAnDung:'A'}]},token);const room=await req('/api/rooms',{idDeThi:exam.idDeThi,tenLop:'Lớp trực tiếp',thoiGianLamBai:10},token)
+ browser=await chromium.launch({channel:'chrome',headless:true});const page=await browser.newPage();const errors=[];page.on('pageerror',()=>errors.push('pageerror'))
+ await page.goto('http://localhost:5173/login');await page.getByLabel('Email',{exact:true}).fill(email);await page.getByLabel('Mật khẩu',{exact:true}).fill(password);await page.getByRole('button',{name:'Đăng nhập',exact:true}).click();await expect(page).toHaveURL(/\/dashboard$/)
+ stage='waiting';await page.goto(`http://localhost:5173/rooms/${room.idPhongThi}/waiting`)
+ const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});const student=await mobile.newPage();student.on('pageerror',()=>errors.push('pageerror'))
+ await student.goto('http://localhost:5173/join');await student.getByLabel('Họ và tên',{exact:true}).fill('Thí sinh trực tiếp');await student.getByLabel('Mã phòng thi',{exact:true}).fill(room.maCodePhongThi);await student.getByRole('button',{name:'Vào phòng thi',exact:true}).click();await expect(student).toHaveURL(new RegExp(`/exam-room/${room.maCodePhongThi}/waiting$`));await expect(student.getByText('Đã kết nối phòng chờ',{exact:true})).toBeVisible({timeout:10000})
+ stage='start';const start=page.getByRole('button',{name:'Bắt đầu làm bài',exact:true});await expect(start).toBeEnabled({timeout:10000});await start.click();await expect(student).toHaveURL(new RegExp(`/exam-room/${room.maCodePhongThi}/taking$`),{timeout:10000})
+ const radio=student.getByRole('radio').first();await expect(radio).toBeEnabled({timeout:10000});await radio.check()
+ const parse=value=>{const [m,s]=value.split(':').map(Number);return m*60+s};const a=parse(await page.getByTestId('exam-countdown').textContent()),b=parse(await student.getByTestId('exam-countdown').textContent());if(!Number.isFinite(a)||!Number.isFinite(b)||Math.abs(a-b)>2)throw Error('Countdown mismatch')
+ await expect.poll(async()=>parse(await student.getByTestId('exam-countdown').textContent()),{timeout:4000}).toBeLessThan(b)
+ if(mode==='recovery'){
+   stage='offline';const original=await student.evaluate(async()=>{const {socket}=await import('/src/services/socket.js');window.__ezamProbeSocket=socket;const keys=Object.values(sessionStorage).map(v=>{try{return JSON.parse(v)}catch{return null}}).find(v=>v?.idHs);const s=await socket.timeout(8000).emitWithAck('sync_exam',{maCodePhongThi:keys.maCodePhongThi});return{idHs:keys.idHs,runId:s.exam.runId,endsAt:s.exam.endsAt}})
+   await mobile.setOffline(true);await student.evaluate(()=>window.__ezamProbeSocket.io.engine.close());await expect(radio).toBeDisabled({timeout:8000});await expect(page.getByTestId(`student-${original.idHs}`).getByText('MẤT KẾT NỐI',{exact:true})).toBeVisible({timeout:10000})
+   const frozen=await student.getByTestId('exam-countdown').textContent();await new Promise(r=>setTimeout(r,1400));await expect(student.getByTestId('exam-countdown')).toHaveText(frozen)
+   await student.screenshot({path:resolve(root,'backend/target/verification/T4_3_offline_mobile.png'),fullPage:true});await page.screenshot({path:resolve(root,'backend/target/verification/T4_3_teacher_lost.png'),fullPage:true})
+   stage='recover-online';await mobile.setOffline(false);await expect(radio).toBeEnabled({timeout:15000});await expect(radio).toBeChecked();await expect(page.getByTestId(`student-${original.idHs}`).getByText('ĐANG LÀM BÀI',{exact:true})).toBeVisible({timeout:8000})
+   stage='f5';await student.reload();await expect(student.getByRole('radio').first()).toBeEnabled({timeout:15000});await expect(student.getByRole('radio').first()).toBeChecked()
+   const restored=await student.evaluate(async()=>{const {socket}=await import('/src/services/socket.js');const s=await socket.timeout(8000).emitWithAck('sync_exam',{maCodePhongThi:location.pathname.split('/')[2]});return{runId:s.exam.runId,endsAt:s.exam.endsAt,state:s.studentState.trangThai}})
+   if(restored.runId!==original.runId||restored.endsAt!==original.endsAt||restored.state!=='DANG_THI')throw Error('F5 changed run or deadline')
+   await student.screenshot({path:resolve(root,'backend/target/verification/T4_3_recovered_mobile.png'),fullPage:true});Object.assign(proof,{offlineFormLocked:true,offlineDisplayFrozen:true,teacherAmberStatus:true,automaticReconnect:true,answerRestoredAfterF5:true,sameRunAndDeadline:true})
+ }
+ if(mode==='submission'||mode==='close'){
+   stage='submit';const resultRequests=[];student.on('request',r=>{if(r.url().includes('/api/submissions/result'))resultRequests.push(r.headers())})
+   await student.getByRole('button',{name:'Nộp bài',exact:true}).click();await expect(student).toHaveURL(/\/result$/,{timeout:12000});await expect(student.getByTestId('result-score')).toHaveText('10');await expect(student.getByTestId('result-correct')).toContainText('1/1');
+   await expect(page.getByTestId('leaderboard-submitted')).toHaveText('1');await expect(page.getByTestId('leaderboard-average')).toHaveText('10');
+   await student.reload();await expect(student.getByTestId('result-score')).toHaveText('10');await expect.poll(()=>resultRequests.length).toBeGreaterThan(0);if(resultRequests.some(h=>h.authorization))throw Error('Teacher JWT sent by student')
+   await student.screenshot({path:resolve(root,'backend/target/verification/T5_2_result_mobile.png'),fullPage:true});await page.screenshot({path:resolve(root,'backend/target/verification/T5_2_leaderboard.png'),fullPage:true});Object.assign(proof,{studentTakingToResult:true,resultReload:true,teacherRealtimeScore:true,studentApiNoJwt:true})
+   if(mode==='close'){
+     const admit=async name=>{const ctx=await browser.newContext({viewport:{width:390,height:844}}),p=await ctx.newPage();await p.goto('http://localhost:5173/join');await p.getByLabel('Họ và tên',{exact:true}).fill(name);await p.getByLabel('Mã phòng thi',{exact:true}).fill(room.maCodePhongThi);await p.getByRole('button',{name:'Vào phòng thi',exact:true}).click();await expect(p).toHaveURL(/\/taking$/,{timeout:10000});await expect(p.getByRole('radio').first()).toBeEnabled();return p}
+     stage='zero-score';const zero=await admit('Thí sinh điểm không');await zero.getByRole('button',{name:'Nộp bài',exact:true}).click();await expect(zero.getByTestId('result-score')).toHaveText('0');await expect(page.getByTestId('leaderboard-submitted')).toHaveText('2');await expect(page.getByTestId('leaderboard-average')).toHaveText('5');const pending=await admit('Thí sinh chưa nộp');await expect(page.getByTestId('leaderboard-total')).toHaveText('3')
+     stage='close-room';await page.getByRole('button',{name:'Đóng phòng thi',exact:true}).click();await page.getByRole('dialog').getByRole('button',{name:'Xác nhận đóng phòng',exact:true}).click();await expect(page.getByRole('heading',{name:/Phòng đã đóng/})).toBeVisible();await expect(pending.getByRole('radio').first()).toBeDisabled();await expect(pending.getByText('Giáo viên đã đóng phòng thi.',{exact:false})).toBeVisible();await student.reload();await expect(student.getByTestId('result-score')).toHaveText('10');await zero.reload();await expect(zero.getByTestId('result-score')).toHaveText('0')
+     stage='csv';const download=page.waitForEvent('download');await page.getByRole('button',{name:'Xuất CSV',exact:true}).click();const path=resolve(root,'backend/target/verification/T5_3_results.csv');await(await download).saveAs(path);const csv=await readFile(path);if(csv.subarray(0,3).toString('hex')!=='efbbbf'||!csv.toString('utf8').includes('Thí sinh điểm không'))throw Error('CSV BOM or Vietnamese missing');
+     await page.reload();await expect(page.getByTestId('leaderboard-submitted')).toHaveText('2');await expect(page.getByTestId('leaderboard-average')).toHaveText('5');await page.screenshot({path:resolve(root,'backend/target/verification/T5_3_closed_leaderboard.png'),fullPage:true});Object.assign(proof,{closedUi:true,pendingFormLocked:true,completedResultAfterClose:true,zeroScoreIncluded:true,submittedTwoAverageFive:true,roomReloadKeepsScores:true,csvUtf8BomVietnamese:true})
+   }
+ }
+ if(!['submission','close'].includes(mode)){await student.screenshot({path:resolve(root,'backend/target/verification/T4_2_taking_mobile.png'),fullPage:true});await page.screenshot({path:resolve(root,'backend/target/verification/T4_2_teacher.png'),fullPage:true})}if(errors.length)throw Error('Page error')
+ Object.assign(proof,{status:'PASS',waitingToTaking:true,radiosEnabledAfterConfirmedAdmission:true,countdownDifferenceSeconds:Math.abs(a-b),countdownDecreases:true,pageErrors:0})
+}catch(e){Object.assign(proof,{status:'FAIL',stage,detail:'Browser exam flow failed'});process.exitCode=1}
+finally{if(browser)await browser.close();if(vite)await vite.close();proof.browserAndViteClosed=true;await writeFile(resolve(root,`backend/target/verification/${mode==='close'?'T5_3_browser':mode==='submission'?'T5_2_browser':mode==='recovery'?'T4_3_browser':'T4_2_browser'}.json`),JSON.stringify(proof,null,2))}

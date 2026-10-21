@@ -1,0 +1,181 @@
+{
+  "syntheticOnly": true,
+  "source": ".tools/railway-publish/backend/app/schemas/auth.py",
+  "sourceSha256": "b3798bb34815f07ac4c944c8fd8beb401985d741a53e9ffd0a27f3c2067dffa1",
+  "generator": {
+    "pydantic": "2.14.1",
+    "email-validator": "2.3.0"
+  },
+  "cases": [
+    {
+      "input": "Teacher@Example.COM",
+      "accepted": true,
+      "normalized": "teacher@example.com"
+    },
+    {
+      "input": " user@example.com ",
+      "accepted": true,
+      "normalized": "user@example.com"
+    },
+    {
+      "input": "Teacher <Teacher@Example.COM>",
+      "accepted": true,
+      "normalized": "teacher@example.com"
+    },
+    {
+      "input": "test+tag@gmail.com",
+      "accepted": true,
+      "normalized": "test+tag@gmail.com"
+    },
+    {
+      "input": "a.b@example.org",
+      "accepted": true,
+      "normalized": "a.b@example.org"
+    },
+    {
+      "input": "a..b@example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": ".a@example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a.@example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "no-at",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@localhost",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@b",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@example.test",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@example.invalid",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@example.local",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@123.123",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@127.0.0.1",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@[127.0.0.1]",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@bad_domain.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@-bad.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@example.com.",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@.example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@@example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a b@example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "\"a b\"@example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a b@example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "nguyễn@example.com",
+      "accepted": true,
+      "normalized": "nguyễn@example.com"
+    },
+    {
+      "input": "a@bücher.de",
+      "accepted": true,
+      "normalized": "a@bücher.de"
+    },
+    {
+      "input": "a@xn--bcher-kva.de",
+      "accepted": true,
+      "normalized": "a@bücher.de"
+    },
+    {
+      "input": "a​b@example.com",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@example.onion",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "a@x.example",
+      "accepted": true,
+      "normalized": "a@x.example"
+    },
+    {
+      "input": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+      "accepted": true,
+      "normalized": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com"
+    },
+    {
+      "input": "",
+      "accepted": false,
+      "normalized": null
+    },
+    {
+      "input": "\tA@example.com\n",
+      "accepted": false,
+      "normalized": null
+    }
+  ]
+}

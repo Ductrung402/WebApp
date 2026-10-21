@@ -1,0 +1,663 @@
+{
+  "task": "T1.1",
+  "legacySource": ".tools/railway-publish/backend/app/models/models.py",
+  "legacySha256": "d225dca61619e02e2697b4caed497e3ebed6badbfa2d771b37cf02750721530f",
+  "catalogVerifiedReadOnly": true,
+  "catalogSha256": "e79281346f1c11fe401e88e0797641327a6261a1f3edcedb03e4be518d1b4493",
+  "tables": [
+    {
+      "tableName": "giao_vien",
+      "className": "GiaoVien",
+      "columns": [
+        {
+          "column": "id_gv",
+          "property": "idGv",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": true,
+          "foreignKey": null,
+          "sourceLine": 29,
+          "ormDefault": "lambda: str(uuid.uuid4())",
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "email",
+          "property": "email",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 30,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "mat_khau",
+          "property": "matKhau",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 31,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "ho_ten",
+          "property": "hoTen",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 32,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "truong",
+          "property": "truong",
+          "javaType": "java.lang.String",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 33,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "tinh",
+          "property": "tinh",
+          "javaType": "java.lang.String",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 34,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        }
+      ]
+    },
+    {
+      "tableName": "de_thi",
+      "className": "DeThi",
+      "columns": [
+        {
+          "column": "id_de_thi",
+          "property": "idDeThi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": true,
+          "foreignKey": null,
+          "sourceLine": 44,
+          "ormDefault": "lambda: str(uuid.uuid4())",
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "id_gv",
+          "property": "idGv",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": "giao_vien.id_gv",
+          "sourceLine": 45,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "ten_de_thi",
+          "property": "tenDeThi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 46,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "khoi",
+          "property": "khoi",
+          "javaType": "java.lang.String",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 47,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "so_luong_cau_hoi",
+          "property": "soLuongCauHoi",
+          "javaType": "java.lang.Integer",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 48,
+          "ormDefault": "0",
+          "serverDefault": null,
+          "postgresType": "int4"
+        },
+        {
+          "column": "kieu_tai_lieu",
+          "property": "kieuTaiLieu",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 49,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "noi_dung_tai_lieu",
+          "property": "noiDungTaiLieu",
+          "javaType": "java.lang.String",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 50,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "text"
+        },
+        {
+          "column": "ngay_tao",
+          "property": "ngayTao",
+          "javaType": "java.time.LocalDate",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 51,
+          "ormDefault": "date.today",
+          "serverDefault": null,
+          "postgresType": "date"
+        }
+      ]
+    },
+    {
+      "tableName": "cau_hoi",
+      "className": "CauHoi",
+      "columns": [
+        {
+          "column": "id_cau_hoi",
+          "property": "idCauHoi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": true,
+          "foreignKey": null,
+          "sourceLine": 62,
+          "ormDefault": "lambda: str(uuid.uuid4())",
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "id_de_thi",
+          "property": "idDeThi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": "de_thi.id_de_thi",
+          "sourceLine": 63,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "noi_dung",
+          "property": "noiDung",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 64,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "text"
+        },
+        {
+          "column": "dap_an_a",
+          "property": "dapAnA",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 65,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "dap_an_b",
+          "property": "dapAnB",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 66,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "dap_an_c",
+          "property": "dapAnC",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 67,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "dap_an_d",
+          "property": "dapAnD",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 68,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "dap_an_dung",
+          "property": "dapAnDung",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 69,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        }
+      ]
+    },
+    {
+      "tableName": "phong_thi",
+      "className": "PhongThi",
+      "columns": [
+        {
+          "column": "id_phong_thi",
+          "property": "idPhongThi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": true,
+          "foreignKey": null,
+          "sourceLine": 78,
+          "ormDefault": "lambda: str(uuid.uuid4())",
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "id_gv",
+          "property": "idGv",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": "giao_vien.id_gv",
+          "sourceLine": 79,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "id_de_thi",
+          "property": "idDeThi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": "de_thi.id_de_thi",
+          "sourceLine": 80,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "ma_code_phong_thi",
+          "property": "maCodePhongThi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 81,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "ten_lop",
+          "property": "tenLop",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 82,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "thoi_gian_lam_bai",
+          "property": "thoiGianLamBai",
+          "javaType": "java.lang.Integer",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 83,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "int4"
+        },
+        {
+          "column": "ngay_tao_phong",
+          "property": "ngayTaoPhong",
+          "javaType": "java.time.LocalDate",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 84,
+          "ormDefault": "date.today",
+          "serverDefault": null,
+          "postgresType": "date"
+        },
+        {
+          "column": "trang_thai_phong",
+          "property": "trangThaiPhong",
+          "javaType": "com.ezam.model.TrangThaiPhongThi",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 85,
+          "ormDefault": "TrangThaiPhongThi.DANG_CHO",
+          "serverDefault": null,
+          "postgresType": "trangthaiphongthi"
+        }
+      ]
+    },
+    {
+      "tableName": "hoc_sinh",
+      "className": "HocSinh",
+      "columns": [
+        {
+          "column": "id_hs",
+          "property": "idHs",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": true,
+          "foreignKey": null,
+          "sourceLine": 97,
+          "ormDefault": "lambda: str(uuid.uuid4())",
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "ho_va_ten",
+          "property": "hoVaTen",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 98,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "ma_code_phong_thi",
+          "property": "maCodePhongThi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": "phong_thi.ma_code_phong_thi",
+          "sourceLine": 99,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        }
+      ]
+    },
+    {
+      "tableName": "ket_qua_thi",
+      "className": "KetQuaThi",
+      "columns": [
+        {
+          "column": "id_kq",
+          "property": "idKq",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": true,
+          "foreignKey": null,
+          "sourceLine": 109,
+          "ormDefault": "lambda: str(uuid.uuid4())",
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "id_hs",
+          "property": "idHs",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": "hoc_sinh.id_hs",
+          "sourceLine": 110,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "id_phong_thi",
+          "property": "idPhongThi",
+          "javaType": "java.lang.String",
+          "nullable": false,
+          "primaryKey": false,
+          "foreignKey": "phong_thi.id_phong_thi",
+          "sourceLine": 111,
+          "ormDefault": null,
+          "serverDefault": null,
+          "postgresType": "varchar"
+        },
+        {
+          "column": "diem_so",
+          "property": "diemSo",
+          "javaType": "java.lang.Double",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 112,
+          "ormDefault": "0.0",
+          "serverDefault": null,
+          "postgresType": "float8"
+        },
+        {
+          "column": "trang_thai",
+          "property": "trangThai",
+          "javaType": "com.ezam.model.TrangThaiBaiLam",
+          "nullable": true,
+          "primaryKey": false,
+          "foreignKey": null,
+          "sourceLine": 113,
+          "ormDefault": "TrangThaiBaiLam.DANG_THI",
+          "serverDefault": null,
+          "postgresType": "trangthaibailam"
+        }
+      ]
+    }
+  ],
+  "enums": [
+    {
+      "className": "TrangThaiBaiLam",
+      "postgresType": "trangthaibailam",
+      "labels": [
+        "DANG_THI",
+        "MAT_KET_NOI",
+        "HOAN_THANH"
+      ]
+    },
+    {
+      "className": "TrangThaiPhongThi",
+      "postgresType": "trangthaiphongthi",
+      "labels": [
+        "DANG_CHO",
+        "DANG_THI",
+        "DA_DONG"
+      ]
+    }
+  ],
+  "constraints": [
+    {
+      "table_name": "cau_hoi",
+      "constraint_name": "cau_hoi_id_de_thi_fkey",
+      "constraint_type": "f",
+      "definition": "FOREIGN KEY (id_de_thi) REFERENCES de_thi(id_de_thi)"
+    },
+    {
+      "table_name": "cau_hoi",
+      "constraint_name": "cau_hoi_pkey",
+      "constraint_type": "p",
+      "definition": "PRIMARY KEY (id_cau_hoi)"
+    },
+    {
+      "table_name": "de_thi",
+      "constraint_name": "de_thi_id_gv_fkey",
+      "constraint_type": "f",
+      "definition": "FOREIGN KEY (id_gv) REFERENCES giao_vien(id_gv)"
+    },
+    {
+      "table_name": "de_thi",
+      "constraint_name": "de_thi_pkey",
+      "constraint_type": "p",
+      "definition": "PRIMARY KEY (id_de_thi)"
+    },
+    {
+      "table_name": "giao_vien",
+      "constraint_name": "giao_vien_email_key",
+      "constraint_type": "u",
+      "definition": "UNIQUE (email)"
+    },
+    {
+      "table_name": "giao_vien",
+      "constraint_name": "giao_vien_pkey",
+      "constraint_type": "p",
+      "definition": "PRIMARY KEY (id_gv)"
+    },
+    {
+      "table_name": "hoc_sinh",
+      "constraint_name": "hoc_sinh_ma_code_phong_thi_fkey",
+      "constraint_type": "f",
+      "definition": "FOREIGN KEY (ma_code_phong_thi) REFERENCES phong_thi(ma_code_phong_thi)"
+    },
+    {
+      "table_name": "hoc_sinh",
+      "constraint_name": "hoc_sinh_pkey",
+      "constraint_type": "p",
+      "definition": "PRIMARY KEY (id_hs)"
+    },
+    {
+      "table_name": "ket_qua_thi",
+      "constraint_name": "ket_qua_thi_id_hs_fkey",
+      "constraint_type": "f",
+      "definition": "FOREIGN KEY (id_hs) REFERENCES hoc_sinh(id_hs)"
+    },
+    {
+      "table_name": "ket_qua_thi",
+      "constraint_name": "ket_qua_thi_id_phong_thi_fkey",
+      "constraint_type": "f",
+      "definition": "FOREIGN KEY (id_phong_thi) REFERENCES phong_thi(id_phong_thi)"
+    },
+    {
+      "table_name": "ket_qua_thi",
+      "constraint_name": "ket_qua_thi_pkey",
+      "constraint_type": "p",
+      "definition": "PRIMARY KEY (id_kq)"
+    },
+    {
+      "table_name": "phong_thi",
+      "constraint_name": "phong_thi_id_de_thi_fkey",
+      "constraint_type": "f",
+      "definition": "FOREIGN KEY (id_de_thi) REFERENCES de_thi(id_de_thi)"
+    },
+    {
+      "table_name": "phong_thi",
+      "constraint_name": "phong_thi_id_gv_fkey",
+      "constraint_type": "f",
+      "definition": "FOREIGN KEY (id_gv) REFERENCES giao_vien(id_gv)"
+    },
+    {
+      "table_name": "phong_thi",
+      "constraint_name": "phong_thi_ma_code_phong_thi_key",
+      "constraint_type": "u",
+      "definition": "UNIQUE (ma_code_phong_thi)"
+    },
+    {
+      "table_name": "phong_thi",
+      "constraint_name": "phong_thi_pkey",
+      "constraint_type": "p",
+      "definition": "PRIMARY KEY (id_phong_thi)"
+    }
+  ],
+  "indexes": [
+    {
+      "table_name": "cau_hoi",
+      "is_unique": true,
+      "is_primary": true,
+      "definition": "CREATE UNIQUE INDEX cau_hoi_pkey ON public.cau_hoi USING btree (id_cau_hoi)"
+    },
+    {
+      "table_name": "de_thi",
+      "is_unique": true,
+      "is_primary": true,
+      "definition": "CREATE UNIQUE INDEX de_thi_pkey ON public.de_thi USING btree (id_de_thi)"
+    },
+    {
+      "table_name": "giao_vien",
+      "is_unique": true,
+      "is_primary": true,
+      "definition": "CREATE UNIQUE INDEX giao_vien_pkey ON public.giao_vien USING btree (id_gv)"
+    },
+    {
+      "table_name": "giao_vien",
+      "is_unique": true,
+      "is_primary": false,
+      "definition": "CREATE UNIQUE INDEX giao_vien_email_key ON public.giao_vien USING btree (email)"
+    },
+    {
+      "table_name": "hoc_sinh",
+      "is_unique": true,
+      "is_primary": true,
+      "definition": "CREATE UNIQUE INDEX hoc_sinh_pkey ON public.hoc_sinh USING btree (id_hs)"
+    },
+    {
+      "table_name": "ket_qua_thi",
+      "is_unique": true,
+      "is_primary": true,
+      "definition": "CREATE UNIQUE INDEX ket_qua_thi_pkey ON public.ket_qua_thi USING btree (id_kq)"
+    },
+    {
+      "table_name": "phong_thi",
+      "is_unique": true,
+      "is_primary": true,
+      "definition": "CREATE UNIQUE INDEX phong_thi_pkey ON public.phong_thi USING btree (id_phong_thi)"
+    },
+    {
+      "table_name": "phong_thi",
+      "is_unique": true,
+      "is_primary": false,
+      "definition": "CREATE UNIQUE INDEX phong_thi_ma_code_phong_thi_key ON public.phong_thi USING btree (ma_code_phong_thi)"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "syntheticOnly": true,
+  "generator": {
+    "passlib": "1.7.4",
+    "bcrypt": "4.0.1"
+  },
+  "profile": {
+    "revision": "2b",
+    "cost": 12,
+    "encoding": "UTF-8",
+    "maxBytes": 72,
+    "nulAllowed": false
+  },
+  "vectors": [
+    {
+      "id": "ascii",
+      "password": "SyntheticPass123!",
+      "wrongPassword": "XyntheticPass123!",
+      "utf8Bytes": 17,
+      "hash": "$2b$12$vSNq4/WDv7GACfvgA.mLr.0qcJM8GLp2tgWqi7NkW/YPaMBIfGAAe"
+    },
+    {
+      "id": "whitespace",
+      "password": "  Synthetic Pass  ",
+      "wrongPassword": "X Synthetic Pass  ",
+      "utf8Bytes": 18,
+      "hash": "$2b$12$ZZFC80NnkXCxMOMA2BkbvufO59DbVyZxLLACzag5tCC7VxnfZ6GQ2"
+    },
+    {
+      "id": "vietnamese",
+      "password": "Mật-khẩu-thử-nghiệm!",
+      "wrongPassword": "Xật-khẩu-thử-nghiệm!",
+      "utf8Bytes": 28,
+      "hash": "$2b$12$QspuvGB.oKeEyuyjFKkCPOnwfhfzxjqDZdTqQN21bKIrqCsSiE9BK"
+    },
+    {
+      "id": "emoji",
+      "password": "EZam-🔐-🧪-2026",
+      "wrongPassword": "XZam-🔐-🧪-2026",
+      "utf8Bytes": 19,
+      "hash": "$2b$12$OBBuuJkZncEHrt2nTCgmwewh6gH30iGQd4mP3F6r7HqsGBjslBFz."
+    },
+    {
+      "id": "high-bit-utf8",
+      "password": "ÿÿÿÿÿÿÿÿ",
+      "wrongPassword": "Xÿÿÿÿÿÿÿ",
+      "utf8Bytes": 16,
+      "hash": "$2b$12$xYLJ8sWC04fvOCDK34BKteNrnHZqtNgstE9.9sQPfd0NK4Np2YOB6"
+    },
+    {
+      "id": "unicode-nfc",
+      "password": "éééééééé",
+      "wrongPassword": "Xééééééé",
+      "utf8Bytes": 16,
+      "hash": "$2b$12$8Ycreh/RqFkuWPke02QuoeyV72oZYIWLDzrfN.VsYaOWFj..ZWfWO"
+    },
+    {
+      "id": "unicode-nfd",
+      "password": "éééééééé",
+      "wrongPassword": "X́ééééééé",
+      "utf8Bytes": 24,
+      "hash": "$2b$12$IKHck8MyOvcFPCWEMv9Za.Wwv3FMu0s1YQ4JnTrcso18cVKIrMw8q"
+    },
+    {
+      "id": "ascii-71-bytes",
+      "password": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "wrongPassword": "Xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "utf8Bytes": 71,
+      "hash": "$2b$12$eD8Vk/IrJvtnelcumPfj/efKV77py9FnQ0bLr0KzKuWBWTtp7x.R6"
+    },
+    {
+      "id": "ascii-72-bytes",
+      "password": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "wrongPassword": "Xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "utf8Bytes": 72,
+      "hash": "$2b$12$eQujyopOJOaC/.PhEP//RuM.yTTZERaTKNRcv3tCj/h9ukkRLXR9."
+    },
+    {
+      "id": "utf8-72-bytes",
+      "password": "éééééééééééééééééééééééééééééééééééé",
+      "wrongPassword": "Xééééééééééééééééééééééééééééééééééé",
+      "utf8Bytes": 72,
+      "hash": "$2b$12$wzzhESOf.71EAJqJpFelvuV3XKmsUAF1qXUq3QukpqnZaJfF2w2jW"
+    },
+    {
+      "id": "emoji-72-bytes",
+      "password": "🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐",
+      "wrongPassword": "X🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐🔐",
+      "utf8Bytes": 72,
+      "hash": "$2b$12$cWUM67B1xsPb6RKTJRdbtObUNqDPds3WAi8XEiyDbqAZe9ucVWs9i"
+    },
+    {
+      "id": "mixed-72-bytes",
+      "password": "aaaaaaaaaaaaaaaaaaaaaếếếếếếếếếếếếếếếếế",
+      "wrongPassword": "Xaaaaaaaaaaaaaaaaaaaaếếếếếếếếếếếếếếếếế",
+      "utf8Bytes": 72,
+      "hash": "$2b$12$L5LtmcjbdKixlCJz2pcE...5mNh0SZpu7l/5fM8sFjePQpM/g0wIy"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+.env
+.env.*
+!.env.example
+.runtime
+.runtime-java
+target
+.idea
+.settings
+.classpath
+.project
+*.log
